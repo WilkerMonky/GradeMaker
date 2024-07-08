@@ -29,7 +29,7 @@ public class DisponibilidadeController {
 	@PostMapping
 	public ResponseEntity<ApiResponse> save(@RequestBody DisponibilidadeDto disponibilidadeDto){
 		try {
-			return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse("Disponibilidade criada",disponibilidadeService.save(disponibilidadeDto)));
+			return disponibilidadeService.save(disponibilidadeDto);
 		} catch (ValidarException e) {
 			return ResponseEntity.internalServerError().body(new ApiResponse("Entrada invalida, verifique e tente novamente", null));
 		} catch (Exception e) {
@@ -42,7 +42,7 @@ public class DisponibilidadeController {
 	@GetMapping("/{id}")
 	public ResponseEntity<ApiResponse> getById(@PathVariable Integer id){
 		try {
-			return ResponseEntity.ok(new ApiResponse("Disponibilidade encontrada",disponibilidadeService.getById(id)));
+			return disponibilidadeService.getById(id);
 			
 		} catch (IdNaoEncontradoException e) {
 			return ResponseEntity.internalServerError().body(new ApiResponse("Id não encontrado", null));
@@ -54,13 +54,13 @@ public class DisponibilidadeController {
 	
 	@GetMapping
 	public ResponseEntity<ApiResponse> getAll(){
-		return ResponseEntity.ok(new ApiResponse("Lista de Disponibilidades", disponibilidadeService.getAll()));
+		return disponibilidadeService.getAll();
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<ApiResponse> delete(@PathVariable Integer id){
 		try {
-			return ResponseEntity.ok(new ApiResponse("Disponibilidade deletada", disponibilidadeService.delete(id)));
+			return disponibilidadeService.delete(id);
 		} catch (IdNaoEncontradoException e) {
 			return ResponseEntity.internalServerError().body(new ApiResponse("Id não encontrado", null));
 		} catch (Exception e) {
@@ -72,7 +72,7 @@ public class DisponibilidadeController {
 	@PutMapping("/{id}")
 	public ResponseEntity<ApiResponse> update(@PathVariable Integer id, @RequestBody DisponibilidadeDto disponibilidadeDto){
 		try {
-			return ResponseEntity.ok(new ApiResponse("Disponibilidade editada",disponibilidadeService.update(id, disponibilidadeDto)));
+			return disponibilidadeService.update(id, disponibilidadeDto);
 		} catch (IdNaoEncontradoException e) {
 			return ResponseEntity.internalServerError().body(new ApiResponse("Id não encontrado", null));
 		} catch (ValidarException e) {

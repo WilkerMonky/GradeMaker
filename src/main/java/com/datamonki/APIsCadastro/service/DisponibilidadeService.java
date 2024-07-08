@@ -2,19 +2,25 @@ package com.datamonki.APIsCadastro.service;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.datamonki.APIsCadastro.dto.DisponibilidadeDto;
-import com.datamonki.APIsCadastro.enums.DiaSemana;
-import com.datamonki.APIsCadastro.enums.Turno;
+
 import com.datamonki.APIsCadastro.exception.IdNaoEncontradoException;
 import com.datamonki.APIsCadastro.exception.ValidarException;
+import com.datamonki.APIsCadastro.model.DiaSemana;
 import com.datamonki.APIsCadastro.model.Disponibilidade;
-
+import com.datamonki.APIsCadastro.model.Professor;
+import com.datamonki.APIsCadastro.model.Turno;
+import com.datamonki.APIsCadastro.repository.DiaSemanaRepository;
 import com.datamonki.APIsCadastro.repository.DisponibilidadeRepository;
 import com.datamonki.APIsCadastro.repository.ProfessorRepository;
+import com.datamonki.APIsCadastro.repository.TurnoRepository;
+import com.datamonki.APIsCadastro.response.ApiResponse;
 
 import jakarta.transaction.Transactional;
 
@@ -26,66 +32,85 @@ public class DisponibilidadeService {
 
 	@Autowired
 	private ProfessorRepository professorRepository;
+	
+	@Autowired
+	private TurnoRepository turnoRepository;
+	
+	@Autowired
+	private DiaSemanaRepository diaSemanaRepository;
 
 	public void verificarId(Integer id) {
 		if (!disponibilidadeRepository.existsById(id)) {
 			throw new IdNaoEncontradoException();
 		}
 	}
-
-	public void verificar(Disponibilidade disponibilidade, DisponibilidadeDto disponibilidadeDto) {
-		List<String> erros = new LinkedList<>();
-		if (!professorRepository.existsById(disponibilidadeDto.professor_id())) {
-			erros.add("Nenhum Professor com id informado existe");
-		}
-		if (DiaSemana.retornar_dia_semana(disponibilidadeDto.dia_semana_id()) == null) {
-			erros.add("Nenhum Dia da Semana com id informado existe");
-		}
-		if (Turno.retornar_turno(disponibilidadeDto.dia_semana_id()) == null) {
-			erros.add("Nenhum Turno com id informado existe");
+	
+	
+	public void verificar(DisponibilidadeDto disponibilidadeDto) {
+		Optional<Professor> professor = professorRepository.findById(disponibilidadeDto.professorId());
+		Optional<DiaSemana> diaSemana = diaSemanaRepository.findById(disponibilidadeDto.diaSemanaId());
+		Optional<Turno> turno = turnoRepository.findById(disponibilidadeDto.turnoId());
+		
+		if(professor.isEmpty()) {
+			throw new IdNaoEncontradoException("Professor com ID " + professor.get().getId() + " não encontrado");
+		}else if(diaSemana.isEmpty()) {
+			throw new IdNaoEncontradoException("Dia da Semana com ID " + diaSemana.get().getId() + " não encontrado");
+		}else if(turno.isEmpty()) {
+			throw new IdNaoEncontradoException("Turno com ID " + turno.get().getId() + " não encontrado");
 		}
 		
-		if (!erros.isEmpty()) {
-			throw new ValidarException(erros);			
-		}
+		
 	}
+	
 
 	@Transactional
-	public Disponibilidade save(DisponibilidadeDto disponibilidadeDto) {
+	public ResponseEntity<ApiResponse> save(DisponibilidadeDto disponibilidadeDto) {
+		verificar(disponibilidadeDto);
+		Optional<Professor> professor = professorRepository.findById(disponibilidadeDto.professorId());
+		Optional<DiaSemana> diaSemana = diaSemanaRepository.findById(disponibilidadeDto.diaSemanaId());
+		Optional<Turno> turno = turnoRepository.findById(disponibilidadeDto.turnoId());
 		Disponibilidade disponibilidade = new Disponibilidade();
-		disponibilidade.setProfessor(professorRepository.findById(disponibilidadeDto.professor_id()).get());
-		disponibilidade.setDiaSemana(DiaSemana.retornar_dia_semana(disponibilidadeDto.dia_semana_id()));
-		disponibilidade.setTurno(Turno.retornar_turno(disponibilidadeDto.dia_semana_id()));
-		verificar(disponibilidade, disponibilidadeDto);
-		return disponibilidadeRepository.save(disponibilidade);
-
+		disponibilidade.setProfessor(professor.get());
+		disponibilidade.setDiaSemana(diaSemana.get());
+		disponibilidade.setTurno(turno.get());
+		disponibilidadeRepository.save(disponibilidade);
+	
+		return ResponseEntity.ok(new ApiResponse("Cadastrado com sucesso", disponibilidade));
+		
 	}
 
-	public Disponibilidade getById(Integer id) {
-		verificarId(id);
-		return disponibilidadeRepository.findById(id).get();
-	}
-
-	public List<Disponibilidade> getAll() {
-		return disponibilidadeRepository.findAll();
-	}
-
-	@Transactional
-	public Disponibilidade update(Integer id, DisponibilidadeDto disponibilidadeDto) {
+	public ResponseEntity<ApiResponse> getById(Integer id) {
 		verificarId(id);
 		Disponibilidade disponibilidade = disponibilidadeRepository.findById(id).get();
-		disponibilidade.setId(id);
-		disponibilidade.setProfessor(professorRepository.findById(disponibilidadeDto.professor_id()).get());
-		disponibilidade.setDiaSemana(DiaSemana.retornar_dia_semana(disponibilidadeDto.dia_semana_id()));
-		disponibilidade.setTurno(Turno.retornar_turno(disponibilidadeDto.dia_semana_id()));
-		verificar(disponibilidade, disponibilidadeDto);
-		return disponibilidadeRepository.save(disponibilidade);
+		return ResponseEntity.ok(new ApiResponse("Disponibilidade localizada", disponibilidade));
+	}
+	
+	
+	public ResponseEntity<ApiResponse> getAll() {
+		List<Disponibilidade> disponibilidades = disponibilidadeRepository.findAll();
+		return ResponseEntity.ok(new ApiResponse("Lista de Disponibilidade", disponibilidades));
 	}
 
-	public Disponibilidade delete(Integer id) {
+	@Transactional
+	public ResponseEntity<ApiResponse> update(Integer id, DisponibilidadeDto disponibilidadeDto) {
+		verificarId(id);
+		verificar(disponibilidadeDto);
+		Optional<Professor> professor = professorRepository.findById(disponibilidadeDto.professorId());
+		Optional<DiaSemana> diaSemana = diaSemanaRepository.findById(disponibilidadeDto.diaSemanaId());
+		Optional<Turno> turno = turnoRepository.findById(disponibilidadeDto.turnoId());
+		Disponibilidade disponibilidade = disponibilidadeRepository.findById(id).get();
+		disponibilidade.setId(id);
+		disponibilidade.setProfessor(professor.get());
+		disponibilidade.setDiaSemana(diaSemana.get());
+		disponibilidade.setTurno(turno.get());
+		disponibilidadeRepository.save(disponibilidade);
+		return ResponseEntity.ok(new ApiResponse("Atualizado com sucesso", disponibilidade));
+	}
+
+	public ResponseEntity<ApiResponse> delete(Integer id) {
 		verificarId(id);
 		Disponibilidade disponibilidade = disponibilidadeRepository.findById(id).get();
 		disponibilidadeRepository.deleteById(id);
-		return disponibilidade;
+		return ResponseEntity.ok(new ApiResponse("Deletado com sucesso", disponibilidade));
 	}
 }

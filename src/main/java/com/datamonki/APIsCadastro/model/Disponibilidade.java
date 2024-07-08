@@ -2,8 +2,6 @@ package com.datamonki.APIsCadastro.model;
 
 import java.io.Serializable;
 
-import com.datamonki.APIsCadastro.enums.DiaSemana;
-import com.datamonki.APIsCadastro.enums.Turno;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,11 +15,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "DISPONIBILIDADE")
-@Data
 @AllArgsConstructor
+@Data
 @NoArgsConstructor
+@Entity
+@Table(name = "disponibilidade")
+
 public class Disponibilidade  implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

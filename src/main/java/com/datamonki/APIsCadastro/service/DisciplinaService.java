@@ -35,21 +35,9 @@ public class DisciplinaService {
 		if (disciplina.getNome().isBlank()) {
 			erros.add("Nome esta vazio");
 		} else if (disciplina.getNome().length() < 3) {
-			erros.add("Nome deve estar acima de 3 caractere");
-		}
-		if (disciplina.getCarga().toString().isBlank()) {
-			erros.add("Carga horaria esta vazio");
-		}
-		if (disciplina.getProfessores().isEmpty()) {
-			erros.add("Nenhum professor informado");
+			erros.add("Nome deve estar acima de 3 caracteres.");
 		}
 		
-		for(Integer professor : disciplinaDto.professor_id()) {
-			if(!professorRepository.existsById(professor)) {
-				erros.add("Professor com id informado não existe");
-				break;
-			}
-		}
 		if (!erros.isEmpty()) {
 			throw new ValidarException(erros);
 		}
@@ -59,11 +47,8 @@ public class DisciplinaService {
 	public Disciplina save(DisciplinaDto disciplinaDto) {
 		Disciplina disciplina = new Disciplina();
 		disciplina.setNome(disciplinaDto.nome());
-		disciplina.setCarga(disciplinaDto.carga());
-		disciplina.setProfessores(professorRepository.findAllById(disciplinaDto.professor_id()).stream().collect(Collectors.toSet()));
 		verificar(disciplina, disciplinaDto);
 		return disciplinaRepository.save(disciplina);
-
 	}
 
 	public Disciplina getById(Integer id) {
@@ -81,8 +66,6 @@ public class DisciplinaService {
 		Disciplina disciplina = disciplinaRepository.findById(id).get();
 		disciplina.setId(id);
 		disciplina.setNome(disciplinaDto.nome());
-		disciplina.setCarga(disciplinaDto.carga());
-		disciplina.setProfessores(professorRepository.findAllById(disciplinaDto.professor_id()).stream().collect(Collectors.toSet()));
 		verificar(disciplina, disciplinaDto);
 		return disciplinaRepository.save(disciplina);
 	}
