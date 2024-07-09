@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.datamonki.APIsCadastro.dto.OfertaDto;
@@ -13,6 +14,7 @@ import com.datamonki.APIsCadastro.model.Oferta;
 import com.datamonki.APIsCadastro.repository.DisciplinaRepository;
 import com.datamonki.APIsCadastro.repository.MatrizRepository;
 import com.datamonki.APIsCadastro.repository.OfertaRepository;
+import com.datamonki.APIsCadastro.response.ApiResponse;
 
 import jakarta.transaction.Transactional;
 
@@ -37,10 +39,10 @@ public class OfertaService {
 		if (oferta.getSemestre().toString().isBlank()) {
 			erros.add("Semestre esta vazio");
 		}
-		if (!matrizRepository.existsById(ofertaDto.matriz_id())) {
+		if (!matrizRepository.existsById(ofertaDto.matrizId())) {
 			erros.add("Nenhuma matriz com id informado existe");
 		}
-		if (!disciplinaRepository.existsById(ofertaDto.disciplina_id())) {
+		if (!disciplinaRepository.existsById(ofertaDto.disciplinaId())) {
 			erros.add("Nenhuma disciplina com id informado existe");
 		}
 		if (!erros.isEmpty()) {
@@ -49,41 +51,43 @@ public class OfertaService {
 	}
 
 	@Transactional
-	public Oferta save(OfertaDto ofertaDto) {
+	public ResponseEntity<ApiResponse> save(OfertaDto ofertaDto) {
 		Oferta oferta = new Oferta();
 		oferta.setSemestre(ofertaDto.semestre());
-		oferta.setMatriz(matrizRepository.findById(ofertaDto.matriz_id()).get());
-		oferta.setDisciplina(disciplinaRepository.findById(ofertaDto.disciplina_id()).get());
+		oferta.setMatriz(matrizRepository.findById(ofertaDto.matrizId()).get());
+		oferta.setDisciplina(disciplinaRepository.findById(ofertaDto.disciplinaId()).get());
 		verificar(oferta, ofertaDto);
-		return ofertaRepository.save(oferta);
-
+		ofertaRepository.save(oferta);
+		return ResponseEntity.ok(new ApiResponse("Oferta cadastrada com sucesso", oferta));
 	}
 
-	public Oferta getById(Integer id) {
+	public ResponseEntity<ApiResponse> getById(Integer id) {
 		verificarId(id);
-		return ofertaRepository.findById(id).get();
+		Oferta oferta =  ofertaRepository.findById(id).get();
+		return ResponseEntity.ok(new ApiResponse("Oferta localizada", oferta));
 	}
 
-	public List<Oferta> getAll() {
-		return ofertaRepository.findAll();
+	public ResponseEntity<ApiResponse>  getAll() {
+		List<Oferta> ofertas = ofertaRepository.findAll();
+		return ResponseEntity.ok(new ApiResponse("Lista de ofertas", ofertas));
 	}
 
 	@Transactional
-	public Oferta update(Integer id, OfertaDto ofertaDto) {
+	public ResponseEntity<ApiResponse> update(Integer id, OfertaDto ofertaDto) {
 		verificarId(id);
 		Oferta oferta = ofertaRepository.findById(id).get();
 		oferta.setId(id);
 		oferta.setSemestre(ofertaDto.semestre());
-		oferta.setMatriz(matrizRepository.findById(ofertaDto.matriz_id()).get());
-		oferta.setDisciplina(disciplinaRepository.findById(ofertaDto.disciplina_id()).get());
+		oferta.setMatriz(matrizRepository.findById(ofertaDto.matrizId()).get());
+		oferta.setDisciplina(disciplinaRepository.findById(ofertaDto.disciplinaId()).get());
 		verificar(oferta, ofertaDto);
-		return ofertaRepository.save(oferta);
+		return ResponseEntity.ok(new ApiResponse("Oferta atualizada com sucesso", oferta));
 	}
 
-	public Oferta delete(Integer id) {
+	public ResponseEntity<ApiResponse> delete(Integer id) {
 		verificarId(id);
-		Oferta tipoCurso = ofertaRepository.findById(id).get();
+		Oferta oferta = ofertaRepository.findById(id).get();
 		ofertaRepository.deleteById(id);
-		return tipoCurso;
+		return ResponseEntity.ok(new ApiResponse("Oferta deletada com sucesso", oferta));
 	}
 }

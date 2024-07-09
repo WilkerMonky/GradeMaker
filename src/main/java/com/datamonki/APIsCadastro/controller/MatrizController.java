@@ -29,7 +29,7 @@ public class MatrizController {
 	@PostMapping
 	public ResponseEntity<ApiResponse> save(@RequestBody MatrizDto matrizDto){
 		try {
-			return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse("Matriz criada",matrizService.save(matrizDto)));
+			return matrizService.save(matrizDto);
 		} catch (ValidarException e) {
 			return ResponseEntity.internalServerError().body(new ApiResponse("Entrada invalida, verifique e tente novamente", null));
 		} catch (Exception e) {
@@ -42,8 +42,7 @@ public class MatrizController {
 	@GetMapping("/{id}")
 	public ResponseEntity<ApiResponse> getById(@PathVariable Integer id){
 		try {
-			return ResponseEntity.ok(new ApiResponse("Matriz encontrada",matrizService.getById(id)));
-			
+			return matrizService.getById(id);
 		} catch (IdNaoEncontradoException e) {
 			return ResponseEntity.internalServerError().body(new ApiResponse("Id não encontrado", null));
 		} catch (Exception e) {
@@ -54,13 +53,13 @@ public class MatrizController {
 	
 	@GetMapping
 	public ResponseEntity<ApiResponse> getAll(){
-		return ResponseEntity.ok(new ApiResponse("Lista de Matrizes", matrizService.getAll()));
+		return matrizService.getAll();
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<ApiResponse> delete(@PathVariable Integer id){
 		try {
-			return ResponseEntity.ok(new ApiResponse("Matriz deletada", matrizService.delete(id)));
+			return  matrizService.delete(id);
 		} catch (IdNaoEncontradoException e) {
 			return ResponseEntity.internalServerError().body(new ApiResponse("Id não encontrado", null));
 		} catch (Exception e) {
@@ -72,7 +71,7 @@ public class MatrizController {
 	@PutMapping("/{id}")
 	public ResponseEntity<ApiResponse> update(@PathVariable Integer id, @RequestBody MatrizDto matrizDto){
 		try {
-			return ResponseEntity.ok(new ApiResponse("Matriz editada",matrizService.update(id, matrizDto)));
+			return matrizService.update(id, matrizDto);
 		} catch (IdNaoEncontradoException e) {
 			return ResponseEntity.internalServerError().body(new ApiResponse("Id não encontrado", null));
 		} catch (ValidarException e) {

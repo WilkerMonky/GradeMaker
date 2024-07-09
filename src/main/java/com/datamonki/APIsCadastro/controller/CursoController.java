@@ -29,7 +29,7 @@ public class CursoController {
 	@PostMapping
 	public ResponseEntity<ApiResponse> save(@RequestBody CursoDto cursoDto){
 		try {
-			return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse("Curso criado",cursoService.save(cursoDto)));
+			return cursoService.save(cursoDto);
 		} catch (ValidarException e) {
 			return ResponseEntity.internalServerError().body(new ApiResponse("Entrada invalida, verifique e tente novamente", null));
 		} catch (Exception e) {
@@ -42,8 +42,7 @@ public class CursoController {
 	@GetMapping("/{id}")
 	public ResponseEntity<ApiResponse> getById(@PathVariable Integer id){
 		try {
-			return ResponseEntity.ok(new ApiResponse("Curso encontrado",cursoService.getById(id)));
-			
+			return cursoService.getById(id);
 		} catch (IdNaoEncontradoException e) {
 			return ResponseEntity.internalServerError().body(new ApiResponse("Id não encontrado", null));
 		} catch (Exception e) {
@@ -54,13 +53,13 @@ public class CursoController {
 	
 	@GetMapping
 	public ResponseEntity<ApiResponse> getAll(){
-		return ResponseEntity.ok(new ApiResponse("Lista de cursos", cursoService.getAll()));
+		return cursoService.getAll();
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<ApiResponse> delete(@PathVariable Integer id){
 		try {
-			return ResponseEntity.ok(new ApiResponse("Curso deletado", cursoService.delete(id)));
+			return cursoService.delete(id);
 		} catch (IdNaoEncontradoException e) {
 			return ResponseEntity.internalServerError().body(new ApiResponse("Id não encontrado", null));
 		} catch (Exception e) {
@@ -72,7 +71,7 @@ public class CursoController {
 	@PutMapping("/{id}")
 	public ResponseEntity<ApiResponse> update(@PathVariable Integer id, @RequestBody CursoDto cursoDto){
 		try {
-			return ResponseEntity.ok(new ApiResponse("Curso editado",cursoService.update(id, cursoDto)));
+			return cursoService.update(id, cursoDto);
 		} catch (IdNaoEncontradoException e) {
 			return ResponseEntity.internalServerError().body(new ApiResponse("Id não encontrado", null));
 		} catch (ValidarException e) {

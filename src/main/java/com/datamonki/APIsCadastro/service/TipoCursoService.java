@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.datamonki.APIsCadastro.dto.TipoCursoDto;
@@ -11,6 +12,7 @@ import com.datamonki.APIsCadastro.exception.IdNaoEncontradoException;
 import com.datamonki.APIsCadastro.exception.ValidarException;
 import com.datamonki.APIsCadastro.model.TipoCurso;
 import com.datamonki.APIsCadastro.repository.TipoCursoRepository;
+import com.datamonki.APIsCadastro.response.ApiResponse;
 
 import jakarta.transaction.Transactional;
 
@@ -39,37 +41,42 @@ public class TipoCursoService {
 	}
 
 	@Transactional
-	public TipoCurso save(TipoCursoDto tipoCursoDto) {
+	public ResponseEntity<ApiResponse> save(TipoCursoDto tipoCursoDto) {
 		TipoCurso tipoCurso = new TipoCurso();
 		tipoCurso.setNome(tipoCursoDto.nome());
 		verificarModelo(tipoCurso);
-		return tipoCursoRepository.save(tipoCurso);
-
+		 tipoCursoRepository.save(tipoCurso);
+		 
+		 return ResponseEntity.ok(new ApiResponse("Tipo do curso criado", tipoCurso));
+		 
 	}
 
-	public TipoCurso getById(Integer id) {
+	public ResponseEntity<ApiResponse> getById(Integer id) {
 		verificarId(id);
-		return tipoCursoRepository.findById(id).get();
+		TipoCurso tipoCurso = tipoCursoRepository.findById(id).get();
+		return ResponseEntity.ok(new ApiResponse("Localizado", tipoCurso));
 	}
 
-	public List<TipoCurso> getAll() {
-		return tipoCursoRepository.findAll();
+	public ResponseEntity<ApiResponse> getAll() {
+		List<TipoCurso> tiposCurso = tipoCursoRepository.findAll();
+		return ResponseEntity.ok(new ApiResponse("Lista tipos de curso", tiposCurso));
 	}
 
 	@Transactional
-	public TipoCurso update(Integer id, TipoCursoDto tipoCursoDto) {
+	public ResponseEntity<ApiResponse> update(Integer id, TipoCursoDto tipoCursoDto) {
 		verificarId(id);
 		TipoCurso tipoCurso = tipoCursoRepository.findById(id).get();
 		tipoCurso.setId(id);
 		tipoCurso.setNome(tipoCursoDto.nome());
 		verificarModelo(tipoCurso);
-		return tipoCursoRepository.save(tipoCurso);
+		tipoCursoRepository.save(tipoCurso);
+		return ResponseEntity.ok(new ApiResponse("Alterado com sucesso", tipoCurso));
 	}
 
-	public TipoCurso delete(Integer id) {
+	public ResponseEntity<ApiResponse> delete(Integer id) {
 		verificarId(id);
 		TipoCurso tipoCurso = tipoCursoRepository.findById(id).get();
 		tipoCursoRepository.deleteById(id);
-		return tipoCurso;
+		return ResponseEntity.ok(new ApiResponse("Deletado com sucesso", tipoCurso));
 	}
 }

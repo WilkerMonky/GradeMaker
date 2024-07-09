@@ -29,7 +29,7 @@ public class TipoCursoController {
 	@PostMapping
 	public ResponseEntity<ApiResponse> save(@RequestBody TipoCursoDto tipoCursoDto){
 		try {
-			return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse("Tipo Curso criado",tipoCursoService.save(tipoCursoDto)));
+			return tipoCursoService.save(tipoCursoDto);
 		} catch (ValidarException e) {
 			return ResponseEntity.internalServerError().body(new ApiResponse("Entrada invalida, verifique e tente novamente", null));
 		} catch (Exception e) {
@@ -42,7 +42,7 @@ public class TipoCursoController {
 	@GetMapping("/{id}")
 	public ResponseEntity<ApiResponse> getById(@PathVariable Integer id){
 		try {
-			return ResponseEntity.ok(new ApiResponse("Curso encontrado",tipoCursoService.getById(id)));
+			return tipoCursoService.getById(id);
 			
 		} catch (IdNaoEncontradoException e) {
 			return ResponseEntity.internalServerError().body(new ApiResponse("Id não encontrado", null));
@@ -54,13 +54,13 @@ public class TipoCursoController {
 	
 	@GetMapping
 	public ResponseEntity<ApiResponse> getAll(){
-		return ResponseEntity.ok(new ApiResponse("Lista de Tipo Cursos", tipoCursoService.getAll()));
+		return tipoCursoService.getAll();
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<ApiResponse> delete(@PathVariable Integer id){
 		try {
-			return ResponseEntity.ok(new ApiResponse("Tipo Curso deletado", tipoCursoService.delete(id)));
+			return tipoCursoService.delete(id);
 		} catch (IdNaoEncontradoException e) {
 			return ResponseEntity.internalServerError().body(new ApiResponse("Id não encontrado", null));
 		} catch (Exception e) {
@@ -72,7 +72,7 @@ public class TipoCursoController {
 	@PutMapping("/{id}")
 	public ResponseEntity<ApiResponse> update(@PathVariable Integer id, @RequestBody TipoCursoDto tipoCursoDto){
 		try {
-			return ResponseEntity.ok(new ApiResponse("Tipo Curso editado",tipoCursoService.update(id, tipoCursoDto)));
+			return tipoCursoService.update(id, tipoCursoDto);
 		} catch (IdNaoEncontradoException e) {
 			return ResponseEntity.internalServerError().body(new ApiResponse("Id não encontrado", null));
 		} catch (ValidarException e) {

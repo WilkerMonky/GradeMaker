@@ -4,14 +4,17 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.datamonki.APIsCadastro.dto.MatrizDto;
 import com.datamonki.APIsCadastro.exception.IdNaoEncontradoException;
 import com.datamonki.APIsCadastro.exception.ValidarException;
+import com.datamonki.APIsCadastro.model.Curso;
 import com.datamonki.APIsCadastro.model.Matriz;
 import com.datamonki.APIsCadastro.repository.CursoRepository;
 import com.datamonki.APIsCadastro.repository.MatrizRepository;
+import com.datamonki.APIsCadastro.response.ApiResponse;
 
 import jakarta.transaction.Transactional;
 
@@ -36,7 +39,7 @@ public class MatrizService {
 		} else if (matriz.getNome().length() < 3) {
 			erros.add("Nome deve estar acima de 3 caractere");
 		}
-		if (!cursoRepository.existsById(matrizDto.curso_id())) {
+		if (!cursoRepository.existsById(matrizDto.cursoId())) {
 			erros.add("Nenhum Curso com id informado existe");
 		}
 		if (!erros.isEmpty()) {
@@ -45,37 +48,45 @@ public class MatrizService {
 	}
 
 	@Transactional
-	public Matriz save(MatrizDto matrizDto) {
+	public ResponseEntity<ApiResponse> save(MatrizDto matrizDto) {
 		Matriz matriz = new Matriz();
 		matriz.setNome(matrizDto.nome());
 		verificar(matriz, matrizDto);
-		return matrizRepository.save(matriz);
-
+		Curso curso = cursoRepository.findById(matrizDto.cursoId()).get();
+		matriz.setCurso(curso);
+		matrizRepository.save(matriz);
+		return ResponseEntity.ok(new ApiResponse("Matriz criada com sucesso",matriz));
 	}
 
-	public Matriz getById(Integer id) {
+	public ResponseEntity<ApiResponse> getById(Integer id) {
 		verificarId(id);
-		return matrizRepository.findById(id).get();
+		Matriz matriz =  matrizRepository.findById(id).get();
+		return ResponseEntity.ok(new ApiResponse("Matriz localizada",matriz)); 
 	}
 
-	public List<Matriz> getAll() {
-		return matrizRepository.findAll();
+	public  ResponseEntity<ApiResponse> getAll() {
+		List<Matriz> matrizes = matrizRepository.findAll();
+		return ResponseEntity.ok(new ApiResponse("Lista de matrizes",matrizes)); 
 	}
 
 	@Transactional
-	public Matriz update(Integer id, MatrizDto matrizDto) {
+	public ResponseEntity<ApiResponse>  update(Integer id, MatrizDto matrizDto) {
 		verificarId(id);
 		Matriz matriz = matrizRepository.findById(id).get();
 		matriz.setId(id);
 		matriz.setNome(matrizDto.nome());
 		verificar(matriz, matrizDto);
-		return matrizRepository.save(matriz);
+		Curso curso = cursoRepository.findById(matrizDto.cursoId()).get();
+		matriz.setCurso(curso);
+		matrizRepository.save(matriz);
+		return ResponseEntity.ok(new ApiResponse("Matriz atualizada com sucesso", matriz)); 
+		
 	}
 
-	public Matriz delete(Integer id) {
+	public ResponseEntity<ApiResponse> delete(Integer id) {
 		verificarId(id);
 		Matriz matriz = matrizRepository.findById(id).get();
 		matrizRepository.deleteById(id);
-		return matriz;
+		return ResponseEntity.ok(new ApiResponse("Matriz deletada com sucesso",matriz)); 
 	}
 }

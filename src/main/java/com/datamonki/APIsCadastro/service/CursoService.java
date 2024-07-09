@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.datamonki.APIsCadastro.dto.CursoDto;
@@ -12,6 +13,7 @@ import com.datamonki.APIsCadastro.exception.ValidarException;
 import com.datamonki.APIsCadastro.model.Curso;
 import com.datamonki.APIsCadastro.repository.CursoRepository;
 import com.datamonki.APIsCadastro.repository.TipoCursoRepository;
+import com.datamonki.APIsCadastro.response.ApiResponse;
 
 import jakarta.transaction.Transactional;
 
@@ -37,7 +39,7 @@ public class CursoService {
 		} else if (curso.getNome().length() < 3) {
 			erros.add("Nome deve estar acima de 3 caractere");
 		}
-		if (!tipoCursoRepository.existsById(cursoDto.tipo_curso_id())) {
+		if (!tipoCursoRepository.existsById(cursoDto.tipoCurso())) {
 			erros.add("Nenhum Tipo Curso com id informado existe");
 		}
 		if (!erros.isEmpty()) {
@@ -46,39 +48,42 @@ public class CursoService {
 	}
 
 	@Transactional
-	public Curso save(CursoDto cursoDto) {
+	public ResponseEntity<ApiResponse> save(CursoDto cursoDto) {
 		Curso curso = new Curso();
 		curso.setNome(cursoDto.nome());
-		curso.setTipoCurso(tipoCursoRepository.findById(cursoDto.tipo_curso_id()).get());
+		curso.setTipoCurso(tipoCursoRepository.findById(cursoDto.tipoCurso()).get());
 		verificar(curso, cursoDto);
-		return cursoRepository.save(curso);
-
+		cursoRepository.save(curso);
+		return ResponseEntity.ok(new ApiResponse("Curso criado com sucesso", curso));
 	}
 
-	public Curso getById(Integer id) {
+	public ResponseEntity<ApiResponse> getById(Integer id) {
 		verificarId(id);
-		return cursoRepository.findById(id).get();
+		Curso curso =  cursoRepository.findById(id).get();
+		return ResponseEntity.ok(new ApiResponse("Curso localizado", curso));
 	}
 
-	public List<Curso> getAll() {
-		return cursoRepository.findAll();
+	public ResponseEntity<ApiResponse> getAll() {
+		List<Curso> cursos  = cursoRepository.findAll();
+		return ResponseEntity.ok(new ApiResponse("Lista de cursos", cursos));
 	}
 
 	@Transactional
-	public Curso update(Integer id, CursoDto cursoDto) {
+	public ResponseEntity<ApiResponse> update(Integer id, CursoDto cursoDto) {
 		verificarId(id);
 		Curso curso = cursoRepository.findById(id).get();
 		curso.setId(id);
 		curso.setNome(cursoDto.nome());
-		curso.setTipoCurso(tipoCursoRepository.findById(cursoDto.tipo_curso_id()).get());
+		curso.setTipoCurso(tipoCursoRepository.findById(cursoDto.tipoCurso()).get());
 		verificar(curso, cursoDto);
-		return cursoRepository.save(curso);
+		cursoRepository.save(curso);
+		return ResponseEntity.ok(new ApiResponse("Curso alterado com sucesso", curso));
 	}
 
-	public Curso delete(Integer id) {
+	public ResponseEntity<ApiResponse> delete(Integer id) {
 		verificarId(id);
 		Curso curso = cursoRepository.findById(id).get();
 		cursoRepository.deleteById(id);
-		return curso;
+		return ResponseEntity.ok(new ApiResponse("Curso deletado com sucesso", curso));
 	}
 }
