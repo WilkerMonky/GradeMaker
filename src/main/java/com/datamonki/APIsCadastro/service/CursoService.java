@@ -1,6 +1,5 @@
 package com.datamonki.APIsCadastro.service;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,33 +25,29 @@ public class CursoService {
 	@Autowired
 	private TipoCursoRepository tipoCursoRepository;
 
-	public void verificarId(Integer id) {
+	private void verificarId(Integer id) {
 		if (!cursoRepository.existsById(id)) {
 			throw new IdNaoEncontradoException();
 		}
 	}
 
-	public void verificar(Curso curso, CursoDto cursoDto) {
-		List<String> erros = new LinkedList<>();
-		if (curso.getNome().isBlank()) {
-			erros.add("Nome esta vazio");
-		} else if (curso.getNome().length() < 3) {
-			erros.add("Nome deve estar acima de 3 caractere");
+	private void verificar(CursoDto cursoDto) {
+		if (cursoDto.nome().isBlank()) {
+			throw new ValidarException("Nome esta vazio");
+		} else if (cursoDto.nome().length() < 3) {
+			throw new ValidarException("Nome deve estar acima de 3 caractere");
 		}
-		if (!tipoCursoRepository.existsById(cursoDto.tipoCurso())) {
-			erros.add("Nenhum Tipo Curso com id informado existe");
-		}
-		if (!erros.isEmpty()) {
-			throw new ValidarException(erros);
+		if (!tipoCursoRepository.existsById(cursoDto.tipoCursoId())) {
+			throw new ValidarException("Nenhum Tipo Curso com id informado existe");
 		}
 	}
 
 	@Transactional
 	public ResponseEntity<ApiResponse> save(CursoDto cursoDto) {
+		verificar(cursoDto);
 		Curso curso = new Curso();
 		curso.setNome(cursoDto.nome());
-		curso.setTipoCurso(tipoCursoRepository.findById(cursoDto.tipoCurso()).get());
-		verificar(curso, cursoDto);
+		curso.setTipoCurso(tipoCursoRepository.findById(cursoDto.tipoCursoId()).get());
 		cursoRepository.save(curso);
 		return ResponseEntity.ok(new ApiResponse("Curso criado com sucesso", curso));
 	}
@@ -71,11 +66,11 @@ public class CursoService {
 	@Transactional
 	public ResponseEntity<ApiResponse> update(Integer id, CursoDto cursoDto) {
 		verificarId(id);
+		verificar(cursoDto);
 		Curso curso = cursoRepository.findById(id).get();
 		curso.setId(id);
 		curso.setNome(cursoDto.nome());
-		curso.setTipoCurso(tipoCursoRepository.findById(cursoDto.tipoCurso()).get());
-		verificar(curso, cursoDto);
+		curso.setTipoCurso(tipoCursoRepository.findById(cursoDto.tipoCursoId()).get());
 		cursoRepository.save(curso);
 		return ResponseEntity.ok(new ApiResponse("Curso alterado com sucesso", curso));
 	}

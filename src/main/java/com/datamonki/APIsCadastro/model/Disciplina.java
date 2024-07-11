@@ -16,14 +16,16 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "DISCIPLINA")
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class Disciplina implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -34,19 +36,14 @@ public class Disciplina implements Serializable {
 	@Column
 	@NotBlank
 	private String nome;
-	
+
 	@OneToMany(mappedBy = "disciplina")
 	private Set<ProfessorDisciplina> professores;
 
 	@JsonGetter("professores")
-	public Set<ProfessorDto> getProfessoresList(){
-		return professores.stream().map(pd-> new ProfessorDto(pd.getProfessor().getId() ,pd.getProfessor().getNome()))
+	public Set<ProfessorDto> getProfessoresList() {
+		return professores.stream().map(pd -> new ProfessorDto(pd.getProfessor().getId(), pd.getProfessor().getNome()))
 				.collect(Collectors.toSet());
 	}
-	
-//	@JsonGetter("professores")
-//	private Set<ProfessorDto> getProfessoresList(){
-//		return professores.stream().map(pd-> new ProfessorDto(pd.getNome()).collect(Collectors.toSet()));
-//	}
-	
+
 }

@@ -1,18 +1,15 @@
 package com.datamonki.APIsCadastro.exception;
 
-import java.util.LinkedList;
 import java.util.List;
 
 public class ValidarException extends RuntimeException {
+	
+	private static final long serialVersionUID = 1L;
 
 	private List<String> erros;
 
-    public ValidarException(List<String> erros) {
-        this.erros = erros;
-    }
-
     public ValidarException(String erro) {
-        this.erros = new LinkedList<>();
+    	super(erro);
         this.erros.add(erro);
     }
 
@@ -20,5 +17,4 @@ public class ValidarException extends RuntimeException {
 		return erros;
 	}
 
-	private static final long serialVersionUID = 1L;
 }

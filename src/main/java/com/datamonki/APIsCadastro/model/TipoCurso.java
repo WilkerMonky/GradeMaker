@@ -15,25 +15,27 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "TIPO_CURSO")
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TipoCurso  implements Serializable {
+@Getter
+@Setter
+public class TipoCurso implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+
 	@Column
 	@NotBlank(message = "Nome não pode ser vazio")
 	private String nome;
-	
+
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	@OneToMany(mappedBy = "tipoCurso")
 	private Set<Curso> cursos = new HashSet<>();

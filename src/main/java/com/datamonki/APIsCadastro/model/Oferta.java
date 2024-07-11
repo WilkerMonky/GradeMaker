@@ -13,14 +13,16 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "OFERTA")
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class Oferta implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -36,7 +38,7 @@ public class Oferta implements Serializable {
 	@JoinColumn(name = "matriz_id")
 	private Matriz matriz;
 
-	@OneToOne // OBS
+	@OneToOne
 	@JoinColumn(name = "disciplina_id")
 	private Disciplina disciplina;
 

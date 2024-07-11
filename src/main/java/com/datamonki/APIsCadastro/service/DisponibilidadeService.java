@@ -1,6 +1,5 @@
 package com.datamonki.APIsCadastro.service;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 import com.datamonki.APIsCadastro.dto.DisponibilidadeDto;
 
 import com.datamonki.APIsCadastro.exception.IdNaoEncontradoException;
-import com.datamonki.APIsCadastro.exception.ValidarException;
 import com.datamonki.APIsCadastro.model.DiaSemana;
 import com.datamonki.APIsCadastro.model.Disponibilidade;
 import com.datamonki.APIsCadastro.model.Professor;
@@ -39,24 +37,24 @@ public class DisponibilidadeService {
 	@Autowired
 	private DiaSemanaRepository diaSemanaRepository;
 
-	public void verificarId(Integer id) {
+	private void verificarId(Integer id) {
 		if (!disponibilidadeRepository.existsById(id)) {
 			throw new IdNaoEncontradoException();
 		}
 	}
 	
 	
-	public void verificar(DisponibilidadeDto disponibilidadeDto) {
+	private void verificar(DisponibilidadeDto disponibilidadeDto) {
 		Optional<Professor> professor = professorRepository.findById(disponibilidadeDto.professorId());
 		Optional<DiaSemana> diaSemana = diaSemanaRepository.findById(disponibilidadeDto.diaSemanaId());
 		Optional<Turno> turno = turnoRepository.findById(disponibilidadeDto.turnoId());
 		
 		if(professor.isEmpty()) {
-			throw new IdNaoEncontradoException("Professor com ID " + professor.get().getId() + " não encontrado");
+			throw new IdNaoEncontradoException("Professor com ID " + disponibilidadeDto.professorId() + " não encontrado");
 		}else if(diaSemana.isEmpty()) {
-			throw new IdNaoEncontradoException("Dia da Semana com ID " + diaSemana.get().getId() + " não encontrado");
+			throw new IdNaoEncontradoException("Dia da Semana com ID " + disponibilidadeDto.diaSemanaId() + " não encontrado");
 		}else if(turno.isEmpty()) {
-			throw new IdNaoEncontradoException("Turno com ID " + turno.get().getId() + " não encontrado");
+			throw new IdNaoEncontradoException("Turno com ID " + disponibilidadeDto.turnoId() + " não encontrado");
 		}
 		
 		

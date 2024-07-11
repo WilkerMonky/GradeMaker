@@ -1,7 +1,6 @@
 package com.datamonki.APIsCadastro.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +30,7 @@ public class CursoController {
 		try {
 			return cursoService.save(cursoDto);
 		} catch (ValidarException e) {
+			e.printStackTrace();
 			return ResponseEntity.internalServerError().body(new ApiResponse("Entrada invalida, verifique e tente novamente", null));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -44,6 +44,7 @@ public class CursoController {
 		try {
 			return cursoService.getById(id);
 		} catch (IdNaoEncontradoException e) {
+			e.printStackTrace();
 			return ResponseEntity.internalServerError().body(new ApiResponse("Id não encontrado", null));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -61,6 +62,7 @@ public class CursoController {
 		try {
 			return cursoService.delete(id);
 		} catch (IdNaoEncontradoException e) {
+			e.printStackTrace();
 			return ResponseEntity.internalServerError().body(new ApiResponse("Id não encontrado", null));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -73,8 +75,10 @@ public class CursoController {
 		try {
 			return cursoService.update(id, cursoDto);
 		} catch (IdNaoEncontradoException e) {
+			e.printStackTrace();
 			return ResponseEntity.internalServerError().body(new ApiResponse("Id não encontrado", null));
 		} catch (ValidarException e) {
+			e.printStackTrace();
 			return ResponseEntity.internalServerError().body(new ApiResponse("Entrada invalida, verifique e tente novamente", null));
 		} catch (Exception e) {
 			e.printStackTrace();

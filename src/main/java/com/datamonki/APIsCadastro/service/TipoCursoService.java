@@ -1,6 +1,5 @@
 package com.datamonki.APIsCadastro.service;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,29 +21,25 @@ public class TipoCursoService {
 	@Autowired
 	private TipoCursoRepository tipoCursoRepository;
 
-	public void verificarId(Integer id) {
+	private void verificarId(Integer id) {
 		if (!tipoCursoRepository.existsById(id)) {
 			throw new IdNaoEncontradoException();
 		}
 	}
 
-	public void verificarModelo(TipoCurso tipoCurso) {
-		List<String> erros = new LinkedList<>();
-		if (tipoCurso.getNome().isEmpty()) {
-			erros.add("Nome esta vazio");
-		} else if (tipoCurso.getNome().length() < 3) {
-			erros.add("Nome deve estar acima de 3 caractere");
-		}
-		if (!erros.isEmpty()) {
-			throw new ValidarException(erros);
+	private void verificar(TipoCursoDto tipoCursoDto) {
+		if (tipoCursoDto.nome().isEmpty()) {
+			throw new ValidarException("Nome esta vazio");
+		} else if (tipoCursoDto.nome().length() < 3) {
+			throw new ValidarException("Nome deve estar acima de 3 caractere");
 		}
 	}
 
 	@Transactional
 	public ResponseEntity<ApiResponse> save(TipoCursoDto tipoCursoDto) {
+		verificar(tipoCursoDto);
 		TipoCurso tipoCurso = new TipoCurso();
 		tipoCurso.setNome(tipoCursoDto.nome());
-		verificarModelo(tipoCurso);
 		 tipoCursoRepository.save(tipoCurso);
 		 
 		 return ResponseEntity.ok(new ApiResponse("Tipo do curso criado", tipoCurso));
@@ -65,10 +60,10 @@ public class TipoCursoService {
 	@Transactional
 	public ResponseEntity<ApiResponse> update(Integer id, TipoCursoDto tipoCursoDto) {
 		verificarId(id);
+		verificar(tipoCursoDto);
 		TipoCurso tipoCurso = tipoCursoRepository.findById(id).get();
 		tipoCurso.setId(id);
 		tipoCurso.setNome(tipoCursoDto.nome());
-		verificarModelo(tipoCurso);
 		tipoCursoRepository.save(tipoCurso);
 		return ResponseEntity.ok(new ApiResponse("Alterado com sucesso", tipoCurso));
 	}
