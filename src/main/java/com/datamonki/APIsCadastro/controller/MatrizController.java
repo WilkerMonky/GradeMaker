@@ -17,85 +17,73 @@ import com.datamonki.APIsCadastro.exception.ValidarException;
 import com.datamonki.APIsCadastro.response.ApiResponse;
 import com.datamonki.APIsCadastro.service.MatrizService;
 
-
 @RestController
 @RequestMapping("/api/matriz")
 public class MatrizController {
-	
+
 	@Autowired
 	private MatrizService matrizService;
-	
+
 	@PostMapping
-	public ResponseEntity<ApiResponse> save(@RequestBody MatrizDto matrizDto){
+	public ResponseEntity<ApiResponse> save(@RequestBody MatrizDto matrizDto) {
 		try {
 			return matrizService.save(matrizDto);
 		} catch (ValidarException e) {
-			return ResponseEntity.internalServerError().body(new ApiResponse("Entrada invalida, verifique e tente novamente", null));
+			e.printStackTrace();
+			return ResponseEntity.internalServerError()
+					.body(new ApiResponse("Entrada invalida, verifique e tente novamente", null));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new ApiResponse("Não foi possivel criar Matriz, tente novamente", null));
 		}
-		
+
 	}
-	
+
 	@GetMapping("/{id}")
-	public ResponseEntity<ApiResponse> getById(@PathVariable Integer id){
+	public ResponseEntity<ApiResponse> getById(@PathVariable Integer id) {
 		try {
 			return matrizService.getById(id);
 		} catch (IdNaoEncontradoException e) {
+			e.printStackTrace();
 			return ResponseEntity.internalServerError().body(new ApiResponse("Id não encontrado", null));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new ApiResponse("Não foi localizar Matriz, tente novamente", null));
 		}
 	}
-	
+
 	@GetMapping
-	public ResponseEntity<ApiResponse> getAll(){
+	public ResponseEntity<ApiResponse> getAll() {
 		return matrizService.getAll();
 	}
-	
+
 	@DeleteMapping("/{id}")
-	public ResponseEntity<ApiResponse> delete(@PathVariable Integer id){
+	public ResponseEntity<ApiResponse> delete(@PathVariable Integer id) {
 		try {
-			return  matrizService.delete(id);
+			return matrizService.delete(id);
 		} catch (IdNaoEncontradoException e) {
+			e.printStackTrace();
 			return ResponseEntity.internalServerError().body(new ApiResponse("Id não encontrado", null));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new ApiResponse("Não foi possivel deletar Matriz, tente novamente", null));
 		}
 	}
-	
+
 	@PutMapping("/{id}")
-	public ResponseEntity<ApiResponse> update(@PathVariable Integer id, @RequestBody MatrizDto matrizDto){
+	public ResponseEntity<ApiResponse> update(@PathVariable Integer id, @RequestBody MatrizDto matrizDto) {
 		try {
 			return matrizService.update(id, matrizDto);
 		} catch (IdNaoEncontradoException e) {
+			e.printStackTrace();
 			return ResponseEntity.internalServerError().body(new ApiResponse("Id não encontrado", null));
 		} catch (ValidarException e) {
-			return ResponseEntity.internalServerError().body(new ApiResponse("Entrada invalida, verifique e tente novamente", null));
+			e.printStackTrace();
+			return ResponseEntity.internalServerError()
+					.body(new ApiResponse("Entrada invalida, verifique e tente novamente", null));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new ApiResponse("Não foi possivel editar Matriz, tente novamente", null));
 		}
 	}
 }
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	

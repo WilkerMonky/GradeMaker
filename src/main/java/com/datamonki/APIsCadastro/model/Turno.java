@@ -28,7 +28,6 @@ public class Turno {
 	private LocalTime horaFim;
 
 	public static Turno retornar_turno(@NotNull Integer dia_semana_id) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

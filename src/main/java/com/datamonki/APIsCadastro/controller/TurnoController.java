@@ -10,20 +10,20 @@ import org.springframework.web.bind.annotation.RestController;
 import com.datamonki.APIsCadastro.response.ApiResponse;
 import com.datamonki.APIsCadastro.service.TurnoService;
 
-
 @RestController
 @RequestMapping("/api/turno")
 public class TurnoController {
-	
+
 	@Autowired
 	private TurnoService turnoService;
-	
+
 	@GetMapping
-	public ResponseEntity<ApiResponse> getAll(){
+	public ResponseEntity<ApiResponse> getAll() {
 		try {
-			return turnoService.getAll(); 
+			return turnoService.getAll();
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse("Dias da semana não localizados",null));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(new ApiResponse("Dias da semana não localizados", null));
 		}
 	}
 }

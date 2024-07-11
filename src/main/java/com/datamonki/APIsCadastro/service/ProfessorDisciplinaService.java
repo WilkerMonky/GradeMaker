@@ -30,83 +30,75 @@ public class ProfessorDisciplinaService {
 
 	@Autowired
 	private ProfessorDisciplinaRepository professorDisciplinaRepository;
-	
+
 	@Autowired
 	private ProfessorRepository professorRepository;
-	
+
 	@Autowired
 	private DisciplinaRepository disciplinaRepository;
-	
-    public void verificarIds(ProfessorDisciplinaId professorDisciplinaId) {
-        Optional<Professor> professor = professorRepository.findById(professorDisciplinaId.getProfessorId());
-        Optional<Disciplina> disciplina = disciplinaRepository.findById(professorDisciplinaId.getDisciplinaId());
 
-        if (professor.isEmpty()) {
-            throw new IdNaoEncontradoException("Professor com ID " + professorDisciplinaId.getProfessorId() + " não encontrado");
-        }
-        if (disciplina.isEmpty()) {
-            throw new IdNaoEncontradoException("Disciplina com ID " + professorDisciplinaId.getDisciplinaId() + " não encontrada");
-        }
-    }
-	@Transactional
-	public ResponseEntity<ApiResponse> save( @Valid ProfessorDisciplinaId professorDisciplinaId){
-		
-		verificarIds(professorDisciplinaId);
-		Optional<Professor> professor  = professorRepository.findById(professorDisciplinaId.getProfessorId()); 
+	public void verificarIds(ProfessorDisciplinaId professorDisciplinaId) {
+		Optional<Professor> professor = professorRepository.findById(professorDisciplinaId.getProfessorId());
 		Optional<Disciplina> disciplina = disciplinaRepository.findById(professorDisciplinaId.getDisciplinaId());
-		
-		
+
+		if (professor.isEmpty()) {
+			throw new IdNaoEncontradoException(
+					"Professor com ID " + professorDisciplinaId.getProfessorId() + " não encontrado");
+		}
+		if (disciplina.isEmpty()) {
+			throw new IdNaoEncontradoException(
+					"Disciplina com ID " + professorDisciplinaId.getDisciplinaId() + " não encontrada");
+		}
+	}
+
+	@Transactional
+	public ResponseEntity<ApiResponse> save(@Valid ProfessorDisciplinaId professorDisciplinaId) {
+
+		verificarIds(professorDisciplinaId);
+		Optional<Professor> professor = professorRepository.findById(professorDisciplinaId.getProfessorId());
+		Optional<Disciplina> disciplina = disciplinaRepository.findById(professorDisciplinaId.getDisciplinaId());
+
 		ProfessorDisciplina professorDisciplina = new ProfessorDisciplina(professorDisciplinaId);
 		professorDisciplina.setProfessor(professor.get());
 		professorDisciplina.setDisciplina(disciplina.get());
 		professorDisciplinaRepository.save(professorDisciplina);
-		
 
 		ProfessorDto professorDto = new ProfessorDto(professor.get().getId(), professor.get().getNome());
 		DisciplinaDto disciplinaDto = new DisciplinaDto(disciplina.get().getId(), disciplina.get().getNome());
-		ProfessorDisciplinaDto professorDisciplinaDto= new ProfessorDisciplinaDto(professorDto, disciplinaDto);
-		return ResponseEntity.ok(new ApiResponse("relacionamento salvo com sucesso ", professorDisciplinaDto));
-		
+		ProfessorDisciplinaDto professorDisciplinaDto = new ProfessorDisciplinaDto(professorDto, disciplinaDto);
+		return ResponseEntity.ok(new ApiResponse("Relacionamento salvo com sucesso ", professorDisciplinaDto));
+
 	}
-	
-	public ResponseEntity<ApiResponse> getAll(){
+
+	public ResponseEntity<ApiResponse> getAll() {
 		List<ProfessorDisciplina> professorDisciplinas = professorDisciplinaRepository.findAll();
-		List<ProfessorDisciplinaDto> professorDisciplinaDtos = professorDisciplinas.stream().map(this::convertToDto).collect(Collectors.toList());
-		
+		List<ProfessorDisciplinaDto> professorDisciplinaDtos = professorDisciplinas.stream().map(this::convertToDto)
+				.collect(Collectors.toList());
+
 		return ResponseEntity.ok(new ApiResponse("Professores indexados com disciplinas", professorDisciplinaDtos));
 	}
-	
-	
-	public ResponseEntity<ApiResponse> delete(ProfessorDisciplinaId professorDisciplinaId){
+
+	public ResponseEntity<ApiResponse> delete(ProfessorDisciplinaId professorDisciplinaId) {
 		verificarIds(professorDisciplinaId);
-		Optional<ProfessorDisciplina> professorDisciplina = professorDisciplinaRepository.findById(professorDisciplinaId);
-		
-		if(professorDisciplina.isPresent()) {
+		Optional<ProfessorDisciplina> professorDisciplina = professorDisciplinaRepository
+				.findById(professorDisciplinaId);
+
+		if (professorDisciplina.isPresent()) {
 			ProfessorDisciplinaDto professorDisciplinaDto = convertToDto(professorDisciplina.get());
 			professorDisciplinaRepository.delete(professorDisciplina.get());
 			return ResponseEntity.ok(new ApiResponse("Deletado com sucesso", professorDisciplinaDto));
-		}else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse("Relacionamento não localizado", null));
-		}	
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(new ApiResponse("Relacionamento não localizado", null));
+		}
 	}
-	
-	
-	
+
 	public ProfessorDisciplinaDto convertToDto(ProfessorDisciplina professorDisciplina) {
 		Professor professor = professorDisciplina.getProfessor();
 		Disciplina disciplina = professorDisciplina.getDisciplina();
 		ProfessorDto professorDto = new ProfessorDto(professor.getId(), professor.getNome());
-        DisciplinaDto disciplinaDto = new DisciplinaDto(disciplina.getId(), disciplina.getNome());
-        return new ProfessorDisciplinaDto(professorDto, disciplinaDto);
+		DisciplinaDto disciplinaDto = new DisciplinaDto(disciplina.getId(), disciplina.getNome());
+		return new ProfessorDisciplinaDto(professorDto, disciplinaDto);
 	}
-	
-	
-	
-	
-	
-	/*
-	 * 
-	 * 
-	 * */
-	
+
 }

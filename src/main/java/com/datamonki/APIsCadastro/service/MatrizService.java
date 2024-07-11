@@ -1,6 +1,5 @@
 package com.datamonki.APIsCadastro.service;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,32 +25,28 @@ public class MatrizService {
 	@Autowired
 	private CursoRepository cursoRepository;
 
-	public void verificarId(Integer id) {
+	private void verificarId(Integer id) {
 		if (!matrizRepository.existsById(id)) {
 			throw new IdNaoEncontradoException();
 		}
 	}
 
-	public void verificar(Matriz matriz, MatrizDto matrizDto) {
-		List<String> erros = new LinkedList<>();
-		if (matriz.getNome().isEmpty()) {
-			erros.add("Nome esta vazio");
-		} else if (matriz.getNome().length() < 3) {
-			erros.add("Nome deve estar acima de 3 caractere");
+	private void verificar(MatrizDto matrizDto) {
+		if (matrizDto.nome().isEmpty()) {
+			throw new ValidarException("Nome esta vazio");
+		} else if (matrizDto.nome().length() < 3) {
+			throw new ValidarException("Nome deve estar acima de 3 caractere");
 		}
 		if (!cursoRepository.existsById(matrizDto.cursoId())) {
-			erros.add("Nenhum Curso com id informado existe");
-		}
-		if (!erros.isEmpty()) {
-			throw new ValidarException(erros);
+			throw new ValidarException("Nenhum Curso com id informado existe");
 		}
 	}
 
 	@Transactional
 	public ResponseEntity<ApiResponse> save(MatrizDto matrizDto) {
+		verificar(matrizDto);
 		Matriz matriz = new Matriz();
 		matriz.setNome(matrizDto.nome());
-		verificar(matriz, matrizDto);
 		Curso curso = cursoRepository.findById(matrizDto.cursoId()).get();
 		matriz.setCurso(curso);
 		matrizRepository.save(matriz);
@@ -72,10 +67,10 @@ public class MatrizService {
 	@Transactional
 	public ResponseEntity<ApiResponse>  update(Integer id, MatrizDto matrizDto) {
 		verificarId(id);
+		verificar(matrizDto);
 		Matriz matriz = matrizRepository.findById(id).get();
 		matriz.setId(id);
 		matriz.setNome(matrizDto.nome());
-		verificar(matriz, matrizDto);
 		Curso curso = cursoRepository.findById(matrizDto.cursoId()).get();
 		matriz.setCurso(curso);
 		matrizRepository.save(matriz);

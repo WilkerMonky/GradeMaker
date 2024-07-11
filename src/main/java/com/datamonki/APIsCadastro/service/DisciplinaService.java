@@ -1,6 +1,5 @@
 package com.datamonki.APIsCadastro.service;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,30 +20,27 @@ public class DisciplinaService {
 	private DisciplinaRepository disciplinaRepository;
 
 
-	public void verificarId(Integer id) {
+	private void verificarId(Integer id) {
 		if (!disciplinaRepository.existsById(id)) {
 			throw new IdNaoEncontradoException();
 		}
 	}
 
-	public void verificar(Disciplina disciplina, DisciplinaDto disciplinaDto) {
-		List<String> erros = new LinkedList<>();
-		if (disciplina.getNome().isBlank()) {
-			erros.add("Nome esta vazio");
-		} else if (disciplina.getNome().length() < 3) {
-			erros.add("Nome deve estar acima de 3 caracteres.");
+	private void verificar(DisciplinaDto disciplinaDto) {
+		if (disciplinaDto.nome().isBlank()) {
+			throw new ValidarException("Nome esta vazio");
+		} else if (disciplinaDto.nome().length() < 3) {
+			throw new ValidarException("Nome deve estar acima de 3 caracteres.");
 		}
 		
-		if (!erros.isEmpty()) {
-			throw new ValidarException(erros);
-		}
+
 	}
 
 	@Transactional
 	public Disciplina save(DisciplinaDto disciplinaDto) {
+		verificar(disciplinaDto);
 		Disciplina disciplina = new Disciplina();
 		disciplina.setNome(disciplinaDto.nome());
-		verificar(disciplina, disciplinaDto);
 		return disciplinaRepository.save(disciplina);
 	}
 
@@ -60,10 +56,10 @@ public class DisciplinaService {
 	@Transactional
 	public Disciplina update(Integer id, DisciplinaDto disciplinaDto) {
 		verificarId(id);
+		verificar(disciplinaDto);
 		Disciplina disciplina = disciplinaRepository.findById(id).get();
 		disciplina.setId(id);
 		disciplina.setNome(disciplinaDto.nome());
-		verificar(disciplina, disciplinaDto);
 		return disciplinaRepository.save(disciplina);
 	}
 

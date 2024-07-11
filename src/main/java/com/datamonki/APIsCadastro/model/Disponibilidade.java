@@ -2,7 +2,6 @@ package com.datamonki.APIsCadastro.model;
 
 import java.io.Serializable;
 
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,14 +11,16 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@AllArgsConstructor
-@Data
-@NoArgsConstructor
 @Entity
 @Table(name = "disponibilidade")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 
 public class Disponibilidade  implements Serializable {
 	private static final long serialVersionUID = 1L;

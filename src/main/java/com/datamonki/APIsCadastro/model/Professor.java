@@ -2,9 +2,7 @@ package com.datamonki.APIsCadastro.model;
 
 import java.io.Serializable;
 import java.util.Set;
-import java.util.stream.Collectors;
-import com.datamonki.APIsCadastro.dto.DisciplinaDto;
-import com.fasterxml.jackson.annotation.JsonGetter;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,14 +13,16 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "professor")
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class Professor  implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -39,10 +39,6 @@ public class Professor  implements Serializable {
 	private Set<ProfessorDisciplina> disciplinas;
 	
 	
-	@JsonGetter("disciplinas")
-	public Set<DisciplinaDto> getDisciplinasList(){
-		return disciplinas.stream().map(pd -> new DisciplinaDto(pd.getDisciplina().getId(), pd.getDisciplina().getNome())).collect(Collectors.toSet());
-	}
 }
 
 	

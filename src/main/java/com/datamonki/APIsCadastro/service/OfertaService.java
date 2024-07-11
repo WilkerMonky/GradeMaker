@@ -1,6 +1,5 @@
 package com.datamonki.APIsCadastro.service;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,35 +27,31 @@ public class OfertaService {
 	@Autowired
 	private DisciplinaRepository disciplinaRepository;
 
-	public void verificarId(Integer id) {
+	private void verificarId(Integer id) {
 		if (!ofertaRepository.existsById(id)) {
 			throw new IdNaoEncontradoException();
 		}
 	}
 
-	public void verificar(Oferta oferta, OfertaDto ofertaDto) {
-		List<String> erros = new LinkedList<>();
-		if (oferta.getSemestre().toString().isBlank()) {
-			erros.add("Semestre esta vazio");
+	private void verificar(OfertaDto ofertaDto) {
+		if (ofertaDto.semestre() == null) {
+			throw new ValidarException("Semestre esta vazio");
 		}
 		if (!matrizRepository.existsById(ofertaDto.matrizId())) {
-			erros.add("Nenhuma matriz com id informado existe");
+			throw new ValidarException("Nenhuma matriz com id informado existe");
 		}
 		if (!disciplinaRepository.existsById(ofertaDto.disciplinaId())) {
-			erros.add("Nenhuma disciplina com id informado existe");
-		}
-		if (!erros.isEmpty()) {
-			throw new ValidarException(erros);
+			throw new ValidarException("Nenhuma disciplina com id informado existe");
 		}
 	}
 
 	@Transactional
 	public ResponseEntity<ApiResponse> save(OfertaDto ofertaDto) {
+		verificar(ofertaDto);
 		Oferta oferta = new Oferta();
 		oferta.setSemestre(ofertaDto.semestre());
 		oferta.setMatriz(matrizRepository.findById(ofertaDto.matrizId()).get());
 		oferta.setDisciplina(disciplinaRepository.findById(ofertaDto.disciplinaId()).get());
-		verificar(oferta, ofertaDto);
 		ofertaRepository.save(oferta);
 		return ResponseEntity.ok(new ApiResponse("Oferta cadastrada com sucesso", oferta));
 	}
@@ -75,12 +70,12 @@ public class OfertaService {
 	@Transactional
 	public ResponseEntity<ApiResponse> update(Integer id, OfertaDto ofertaDto) {
 		verificarId(id);
+		verificar(ofertaDto);
 		Oferta oferta = ofertaRepository.findById(id).get();
 		oferta.setId(id);
 		oferta.setSemestre(ofertaDto.semestre());
 		oferta.setMatriz(matrizRepository.findById(ofertaDto.matrizId()).get());
 		oferta.setDisciplina(disciplinaRepository.findById(ofertaDto.disciplinaId()).get());
-		verificar(oferta, ofertaDto);
 		return ResponseEntity.ok(new ApiResponse("Oferta atualizada com sucesso", oferta));
 	}
 

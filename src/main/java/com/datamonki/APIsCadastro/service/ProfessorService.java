@@ -1,6 +1,6 @@
 package com.datamonki.APIsCadastro.service;
 
-import java.util.LinkedList;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,29 +20,26 @@ public class ProfessorService {
 	@Autowired
 	private ProfessorRepository professorRepository;
 
-	public void verificarId(Integer id) {
+	private void verificarId(Integer id) {
 		if (!professorRepository.existsById(id)) {
 			throw new IdNaoEncontradoException();
 		}
 	}
 
-	public void verificar(Professor professor) {
-		List<String> erros = new LinkedList<>();
-		if (professor.getNome().isBlank()) {
-			erros.add("Nome esta vazio");
-		} else if (professor.getNome().length() < 3) {
-			erros.add("Nome deve estar acima de 3 caractere");
-		}
-		if (!erros.isEmpty()) {
-			throw new ValidarException(erros);
+	private void verificar(ProfessorDto professorDto) {
+
+		if (professorDto.nome().isBlank()) {
+			throw new ValidarException("Nome esta vazio");
+		} else if (professorDto.nome().length() < 3) {
+			throw new ValidarException("Nome deve estar acima de 3 caractere");
 		}
 	}
 
 	@Transactional
 	public Professor save(ProfessorDto professorDto) {
+		verificar(professorDto);
 		Professor professor = new Professor();
 		professor.setNome(professorDto.nome());
-		verificar(professor);
 		return professorRepository.save(professor);
 
 	}
@@ -59,10 +56,10 @@ public class ProfessorService {
 	@Transactional
 	public Professor update(Integer id, ProfessorDto professorDto) {
 		verificarId(id);
+		verificar(professorDto);
 		Professor professor = professorRepository.findById(id).get();
 		professor.setId(id);
 		professor.setNome(professorDto.nome());
-		verificar(professor);
 		return professorRepository.save(professor);
 	}
 
