@@ -1,6 +1,5 @@
 package com.datamonki.APIsCadastro.service;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,9 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.datamonki.APIsCadastro.dto.DisponibilidadeDto;
-
 import com.datamonki.APIsCadastro.exception.IdNaoEncontradoException;
-import com.datamonki.APIsCadastro.exception.ValidarException;
 import com.datamonki.APIsCadastro.model.DiaSemana;
 import com.datamonki.APIsCadastro.model.Disponibilidade;
 import com.datamonki.APIsCadastro.model.Professor;

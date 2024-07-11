@@ -2,7 +2,6 @@ package com.datamonki.APIsCadastro.service;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +11,6 @@ import com.datamonki.APIsCadastro.exception.IdNaoEncontradoException;
 import com.datamonki.APIsCadastro.exception.ValidarException;
 import com.datamonki.APIsCadastro.model.Disciplina;
 import com.datamonki.APIsCadastro.repository.DisciplinaRepository;
-import com.datamonki.APIsCadastro.repository.ProfessorRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -21,8 +19,7 @@ public class DisciplinaService {
 
 	@Autowired
 	private DisciplinaRepository disciplinaRepository;
-	@Autowired
-	private ProfessorRepository professorRepository;
+
 
 	public void verificarId(Integer id) {
 		if (!disciplinaRepository.existsById(id)) {

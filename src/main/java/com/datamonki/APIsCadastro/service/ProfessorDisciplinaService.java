@@ -23,7 +23,6 @@ import com.datamonki.APIsCadastro.response.ApiResponse;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import java.util.LinkedList;
 import java.util.List;
 
 @Service
