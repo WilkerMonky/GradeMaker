@@ -15,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,6 +38,10 @@ public class Disciplina implements Serializable {
 	@NotBlank
 	private String nome;
 
+	@Column
+	@NotNull
+	private Integer carga_horaria;
+	
 	@OneToMany(mappedBy = "disciplina")
 	private Set<ProfessorDisciplina> professores;
 
@@ -45,5 +50,7 @@ public class Disciplina implements Serializable {
 		return professores.stream().map(pd -> new ProfessorDto(pd.getProfessor().getId(), pd.getProfessor().getNome()))
 				.collect(Collectors.toSet());
 	}
+
+
 
 }

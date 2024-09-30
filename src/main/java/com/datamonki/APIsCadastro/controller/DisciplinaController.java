@@ -1,7 +1,6 @@
 package com.datamonki.APIsCadastro.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +27,7 @@ public class DisciplinaController {
 	@PostMapping
 	public ResponseEntity<ApiResponse> save(@RequestBody DisciplinaDto disciplinaDto) {
 		try {
-			return ResponseEntity.status(HttpStatus.CREATED)
-					.body(new ApiResponse("Disciplina criada", disciplinaService.save(disciplinaDto)));
+			return disciplinaService.save(disciplinaDto);
 		} catch (ValidarException e) {
 			e.printStackTrace();
 			return ResponseEntity.internalServerError()
@@ -44,7 +42,7 @@ public class DisciplinaController {
 	@GetMapping("/{id}")
 	public ResponseEntity<ApiResponse> getById(@PathVariable Integer id) {
 		try {
-			return ResponseEntity.ok(new ApiResponse("Disciplina encontrada", disciplinaService.getById(id)));
+			return disciplinaService.getById(id);
 		} catch (IdNaoEncontradoException e) {
 			e.printStackTrace();
 			return ResponseEntity.internalServerError().body(new ApiResponse("Id não encontrado", null));
@@ -56,13 +54,13 @@ public class DisciplinaController {
 
 	@GetMapping
 	public ResponseEntity<ApiResponse> getAll() {
-		return ResponseEntity.ok(new ApiResponse("Lista de Disciplinas", disciplinaService.getAll()));
+		return disciplinaService.getAll();
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<ApiResponse> delete(@PathVariable Integer id) {
 		try {
-			return ResponseEntity.ok(new ApiResponse("Disciplina deletada", disciplinaService.delete(id)));
+			return disciplinaService.delete(id);
 		} catch (IdNaoEncontradoException e) {
 			e.printStackTrace();
 			return ResponseEntity.internalServerError().body(new ApiResponse("Id não encontrado", null));
@@ -75,8 +73,7 @@ public class DisciplinaController {
 	@PutMapping("/{id}")
 	public ResponseEntity<ApiResponse> update(@PathVariable Integer id, @RequestBody DisciplinaDto disciplinaDto) {
 		try {
-			return ResponseEntity
-					.ok(new ApiResponse("Disciplina editada", disciplinaService.update(id, disciplinaDto)));
+			return disciplinaService.update(id, disciplinaDto);
 		} catch (IdNaoEncontradoException e) {
 			e.printStackTrace();
 			return ResponseEntity.internalServerError().body(new ApiResponse("Id não encontrado", null));

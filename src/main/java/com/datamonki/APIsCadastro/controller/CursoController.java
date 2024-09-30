@@ -19,7 +19,7 @@ import com.datamonki.APIsCadastro.service.CursoService;
 
 
 @RestController
-@RequestMapping("/api/curso")
+@RequestMapping("/api/curso" )
 public class CursoController {
 	
 	@Autowired

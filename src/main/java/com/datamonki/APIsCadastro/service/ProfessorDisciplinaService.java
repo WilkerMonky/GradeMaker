@@ -64,7 +64,7 @@ public class ProfessorDisciplinaService {
 		professorDisciplinaRepository.save(professorDisciplina);
 
 		ProfessorDto professorDto = new ProfessorDto(professor.get().getId(), professor.get().getNome());
-		DisciplinaDto disciplinaDto = new DisciplinaDto(disciplina.get().getId(), disciplina.get().getNome());
+		DisciplinaDto disciplinaDto = new DisciplinaDto(disciplina.get().getId(), disciplina.get().getNome(), disciplina.get().getCarga_horaria());
 		ProfessorDisciplinaDto professorDisciplinaDto = new ProfessorDisciplinaDto(professorDto, disciplinaDto);
 		return ResponseEntity.ok(new ApiResponse("Relacionamento salvo com sucesso ", professorDisciplinaDto));
 
@@ -97,7 +97,7 @@ public class ProfessorDisciplinaService {
 		Professor professor = professorDisciplina.getProfessor();
 		Disciplina disciplina = professorDisciplina.getDisciplina();
 		ProfessorDto professorDto = new ProfessorDto(professor.getId(), professor.getNome());
-		DisciplinaDto disciplinaDto = new DisciplinaDto(disciplina.getId(), disciplina.getNome());
+		DisciplinaDto disciplinaDto = new DisciplinaDto(disciplina.getId(), disciplina.getNome(), disciplina.getCarga_horaria());
 		return new ProfessorDisciplinaDto(professorDto, disciplinaDto);
 	}
 

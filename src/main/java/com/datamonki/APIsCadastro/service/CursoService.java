@@ -81,4 +81,5 @@ public class CursoService {
 		cursoRepository.deleteById(id);
 		return ResponseEntity.ok(new ApiResponse("Curso deletado com sucesso", curso));
 	}
+	
 }

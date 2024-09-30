@@ -47,4 +47,6 @@ public class Curso implements Serializable {
 	private Set<Matriz> matrizes = new HashSet<>();
 	
 
+	
+	
 }
