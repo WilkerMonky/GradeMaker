@@ -42,4 +42,6 @@ public class Disponibilidade  implements Serializable {
 	@JoinColumn(name="turno_id")
 	private Turno turno;
 
+
+
 }
