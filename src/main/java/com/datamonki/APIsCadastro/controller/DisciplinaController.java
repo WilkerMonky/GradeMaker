@@ -54,7 +54,12 @@ public class DisciplinaController {
 
 	@GetMapping
 	public ResponseEntity<ApiResponse> getAll() {
-		return disciplinaService.getAll();
+		try {
+			return disciplinaService.getAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.ok(new ApiResponse("Não foi possivel localizar Disciplinas, tente novamente", null));
+		}
 	}
 
 	@DeleteMapping("/{id}")

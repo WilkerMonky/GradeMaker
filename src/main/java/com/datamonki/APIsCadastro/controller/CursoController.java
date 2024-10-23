@@ -17,7 +17,6 @@ import com.datamonki.APIsCadastro.exception.ValidarException;
 import com.datamonki.APIsCadastro.response.ApiResponse;
 import com.datamonki.APIsCadastro.service.CursoService;
 
-
 @RestController
 @RequestMapping("/api/curso" )
 public class CursoController {
@@ -53,8 +52,13 @@ public class CursoController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<ApiResponse> getAll(){
-		return cursoService.getAll();
+	public ResponseEntity<ApiResponse> getAll(){ 
+		try {
+			return cursoService.getAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.ok(new ApiResponse("Não foi possivel localizar Cursos, tente novamente", null));
+		}
 	}
 	
 	@DeleteMapping("/{id}")

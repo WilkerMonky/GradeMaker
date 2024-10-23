@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -42,11 +42,9 @@ public class Curso implements Serializable {
 	@JoinColumn(name = "tipo_curso_id")
 	private TipoCurso tipoCurso;
 
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	@OneToMany(mappedBy = "curso")
-	private Set<Matriz> matrizes = new HashSet<>();
-	
+	@JsonIgnore
+	private Set<Oferta> ofertas = new HashSet<>();
 
-	
-	
+
 }

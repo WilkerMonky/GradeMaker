@@ -53,8 +53,13 @@ public class TipoCursoController {
 	}
 
 	@GetMapping
-	public ResponseEntity<ApiResponse> getAll() {
-		return tipoCursoService.getAll();
+	public ResponseEntity<ApiResponse> getAll() { 
+		try {
+			return tipoCursoService.getAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.ok(new ApiResponse("Não foi possivel localizar Tipos de cursos, tente novamente", null));
+		}
 	}
 
 	@DeleteMapping("/{id}")

@@ -70,6 +70,8 @@ public class DisponibilidadeService {
 		disponibilidade.setProfessor(professor.get());
 		disponibilidade.setDiaSemana(diaSemana.get());
 		disponibilidade.setTurno(turno.get());
+		disponibilidade.setSemestre(disponibilidadeDto.semestre());
+		disponibilidade.setAno(disponibilidadeDto.ano());
 		disponibilidadeRepository.save(disponibilidade);
 	
 		return ResponseEntity.ok(new ApiResponse("Cadastrado com sucesso", disponibilidade));
@@ -100,6 +102,8 @@ public class DisponibilidadeService {
 		disponibilidade.setProfessor(professor.get());
 		disponibilidade.setDiaSemana(diaSemana.get());
 		disponibilidade.setTurno(turno.get());
+		disponibilidade.setSemestre(disponibilidadeDto.semestre()); 
+		disponibilidade.setAno(disponibilidadeDto.ano());
 		disponibilidadeRepository.save(disponibilidade);
 		return ResponseEntity.ok(new ApiResponse("Atualizado com sucesso", disponibilidade));
 	}

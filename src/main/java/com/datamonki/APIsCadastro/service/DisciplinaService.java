@@ -2,7 +2,6 @@ package com.datamonki.APIsCadastro.service;
 
 import java.util.List;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -29,7 +28,7 @@ public class DisciplinaService {
 		}
 	}
 
-	private void verificar(DisciplinaDto disciplinaDto) {
+	private void verificar(DisciplinaDto disciplinaDto) { 
 		if (disciplinaDto.nome().isBlank()) {
 			throw new ValidarException("Nome esta vazio");
 		} else if (disciplinaDto.nome().length() < 3) {
@@ -73,7 +72,7 @@ public class DisciplinaService {
 		disciplina.setNome(disciplinaDto.nome());
 		disciplina.setCarga_horaria(disciplinaDto.carga_horaria());
 		disciplinaRepository.save(disciplina);
-		return ResponseEntity.ok(new ApiResponse("Disciplina atualizada com sucesso!", disciplinaDto));
+		return ResponseEntity.ok(new ApiResponse("Disciplina atualizada com sucesso!", disciplinaDto)); 
 	}
 
 	public ResponseEntity<ApiResponse> delete(Integer id) {
@@ -81,6 +80,6 @@ public class DisciplinaService {
 		Disciplina disciplina = disciplinaRepository.findById(id).get();
 		DisciplinaDto d2 = new DisciplinaDto(disciplina.getId(),disciplina.getNome(), disciplina.getCarga_horaria());
 		disciplinaRepository.deleteById(id);
-		return ResponseEntity.ok(new ApiResponse("Disciplina deletada com sucesso", d2));
+		return ResponseEntity.ok(new ApiResponse("Disciplina deletada com sucesso", d2)); 
 	}
 }

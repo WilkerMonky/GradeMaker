@@ -31,15 +31,15 @@ public class Oferta implements Serializable {
 	private Integer id;
 
 	@Column
-	@NotNull(message = "Nome não pode ser vazio")
+	@NotNull(message = "Semestre não pode estar vazio")
 	private Integer semestre;
-
-	@ManyToOne
-	@JoinColumn(name = "matriz_id")
-	private Matriz matriz;
 
 	@OneToOne
 	@JoinColumn(name = "disciplina_id")
 	private Disciplina disciplina;
+
+	@ManyToOne
+	@JoinColumn(name = "curso_id")
+	private Curso curso;
 
 }

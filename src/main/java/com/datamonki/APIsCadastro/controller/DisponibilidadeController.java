@@ -55,7 +55,12 @@ public class DisponibilidadeController {
 
 	@GetMapping
 	public ResponseEntity<ApiResponse> getAll() {
-		return disponibilidadeService.getAll();
+		try {
+			return disponibilidadeService.getAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.ok(new ApiResponse("Não foi possivel localizar Disponibilidades, tente novamente", null));
+		}
 	}
 
 	@DeleteMapping("/{id}")

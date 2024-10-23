@@ -1,7 +1,6 @@
 package com.datamonki.APIsCadastro.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +21,8 @@ public class DiaSemanaController {
 		try {
 			return diaSemanaService.getAll();
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse("Dias da semana não localizados",null));
+			e.printStackTrace();
+			return ResponseEntity.ok(new ApiResponse("Não foi possivel localizar Dias da semana, tente novamente", null));
 		}
 	}
 }

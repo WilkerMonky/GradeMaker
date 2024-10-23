@@ -2,6 +2,7 @@ package com.datamonki.APIsCadastro.model;
 
 import java.io.Serializable;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,6 +29,14 @@ public class Disponibilidade  implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+
+	@Column
+	@NotNull
+	private Integer semestre;
+
+	@Column
+	@NotNull
+	private Integer ano;
 	
 	@ManyToOne
 	@JoinColumn(name= "professor_id")
@@ -41,5 +50,6 @@ public class Disponibilidade  implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="turno_id")
 	private Turno turno;
+	
 
 }
