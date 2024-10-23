@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import com.datamonki.APIsCadastro.dto.ProfessorDto;
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -43,6 +44,7 @@ public class Disciplina implements Serializable {
 	private Integer carga_horaria;
 	
 	@OneToMany(mappedBy = "disciplina")
+	@JsonIgnore
 	private Set<ProfessorDisciplina> professores;
 
 	@JsonGetter("professores")
@@ -50,7 +52,4 @@ public class Disciplina implements Serializable {
 		return professores.stream().map(pd -> new ProfessorDto(pd.getProfessor().getId(), pd.getProfessor().getNome()))
 				.collect(Collectors.toSet());
 	}
-
-
-
 }

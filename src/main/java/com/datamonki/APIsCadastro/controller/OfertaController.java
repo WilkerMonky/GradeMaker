@@ -55,7 +55,12 @@ public class OfertaController {
 
 	@GetMapping
 	public ResponseEntity<ApiResponse> getAll() {
-		return ofertaService.getAll();
+		try {
+			return ofertaService.getAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.ok(new ApiResponse("Não foi possivel localizar Ofertas, tente novamente", null));
+		}
 	}
 
 	@DeleteMapping("/{id}")

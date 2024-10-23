@@ -55,8 +55,13 @@ public class ProfessorController {
 	}
 
 	@GetMapping
-	public ResponseEntity<ApiResponse> getAll() {
-		return ResponseEntity.ok(new ApiResponse("Lista de Professores", professorService.getAll()));
+	public ResponseEntity<ApiResponse> getAll() { 
+		try {
+			return ResponseEntity.ok(new ApiResponse("Lista de Professores", professorService.getAll()));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.ok(new ApiResponse("Não foi possivel localizar Professores, tente novamente", null));
+		}
 	}
 
 	@DeleteMapping("/{id}")
