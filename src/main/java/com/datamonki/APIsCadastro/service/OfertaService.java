@@ -59,12 +59,12 @@ public class OfertaService {
 	public ResponseEntity<ApiResponse> getById(Integer id) {
 		verificarId(id);
 		Oferta oferta =  ofertaRepository.findById(id).get();
-		return ResponseEntity.ok(new ApiResponse("Oferta localizada", oferta)); 
+		return ResponseEntity.ok(new ApiResponse("Oferta localizada com sucesso", oferta)); 
 	}
 
 	public ResponseEntity<ApiResponse>  getAll() { 
 		List<Oferta> ofertas = ofertaRepository.findAll();
-		return ResponseEntity.ok(new ApiResponse("Lista de ofertas", ofertas)); 
+		return ResponseEntity.ok(new ApiResponse("Lista de ofertas cadastradas", ofertas)); 
 	}
 
 	@Transactional
@@ -74,7 +74,8 @@ public class OfertaService {
 		Oferta oferta = ofertaRepository.findById(id).get();
 		oferta.setId(id);
 		oferta.setSemestre(ofertaDto.semestre());
-		oferta.setDisciplina(disciplinaRepository.findById(ofertaDto.disciplinaId()).get());
+		oferta.setDisciplina(disciplinaRepository.findById(ofertaDto.disciplinaId()).get());	
+		ofertaRepository.save(oferta);
 		return ResponseEntity.ok(new ApiResponse("Oferta atualizada com sucesso", oferta));
 	}
 

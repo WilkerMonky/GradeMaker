@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "OFERTA")
+@Table(name = "oferta")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -31,7 +31,7 @@ public class Oferta implements Serializable {
 	private Integer id;
 
 	@Column
-	@NotNull(message = "Semestre não pode estar vazio")
+	@NotNull
 	private Integer semestre;
 
 	@OneToOne

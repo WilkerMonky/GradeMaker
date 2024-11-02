@@ -74,20 +74,20 @@ public class DisponibilidadeService {
 		disponibilidade.setAno(disponibilidadeDto.ano());
 		disponibilidadeRepository.save(disponibilidade);
 	
-		return ResponseEntity.ok(new ApiResponse("Cadastrado com sucesso", disponibilidade));
+		return ResponseEntity.ok(new ApiResponse("Disponibilidade cadastrada com sucesso", disponibilidade));
 		
 	}
 
 	public ResponseEntity<ApiResponse> getById(Integer id) {
 		verificarId(id);
 		Disponibilidade disponibilidade = disponibilidadeRepository.findById(id).get();
-		return ResponseEntity.ok(new ApiResponse("Disponibilidade localizada", disponibilidade));
+		return ResponseEntity.ok(new ApiResponse("Disponibilidade localizada com sucesso", disponibilidade));
 	}
 	
 	
 	public ResponseEntity<ApiResponse> getAll() {
 		List<Disponibilidade> disponibilidades = disponibilidadeRepository.findAll();
-		return ResponseEntity.ok(new ApiResponse("Lista de Disponibilidade", disponibilidades));
+		return ResponseEntity.ok(new ApiResponse("Lista de disponibilidades cadastradas", disponibilidades));
 	}
 
 	@Transactional
@@ -105,13 +105,13 @@ public class DisponibilidadeService {
 		disponibilidade.setSemestre(disponibilidadeDto.semestre()); 
 		disponibilidade.setAno(disponibilidadeDto.ano());
 		disponibilidadeRepository.save(disponibilidade);
-		return ResponseEntity.ok(new ApiResponse("Atualizado com sucesso", disponibilidade));
+		return ResponseEntity.ok(new ApiResponse("Disponibilidade atualizada com sucesso", disponibilidade));
 	}
 
 	public ResponseEntity<ApiResponse> delete(Integer id) {
 		verificarId(id);
 		Disponibilidade disponibilidade = disponibilidadeRepository.findById(id).get();
 		disponibilidadeRepository.deleteById(id);
-		return ResponseEntity.ok(new ApiResponse("Deletado com sucesso", disponibilidade));
+		return ResponseEntity.ok(new ApiResponse("Disponibilidade deletada com sucesso", disponibilidade));
 	}
 }

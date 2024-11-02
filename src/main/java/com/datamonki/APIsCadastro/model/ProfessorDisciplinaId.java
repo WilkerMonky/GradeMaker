@@ -14,9 +14,9 @@ import lombok.Setter;
 public class ProfessorDisciplinaId implements Serializable {
     
     private static final long serialVersionUID = 1L;
-    @NotNull(message="professorId obrigatório")
+    @NotNull
 	private Integer professorId;
-    @NotNull(message = "disciplinaId obrigatório")
+    @NotNull
     private Integer disciplinaId;
 
     public ProfessorDisciplinaId() {}
@@ -25,8 +25,6 @@ public class ProfessorDisciplinaId implements Serializable {
         this.professorId = professorId;
         this.disciplinaId = disciplinaId;
     }
-
-    // getters, setters, equals, and hashCode methods
 
     @Override
     public boolean equals(Object o) {
@@ -42,4 +40,3 @@ public class ProfessorDisciplinaId implements Serializable {
         return Objects.hash(professorId, disciplinaId);
     }
 }
-

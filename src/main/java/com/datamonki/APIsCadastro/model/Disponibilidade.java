@@ -50,8 +50,4 @@ public class Disponibilidade  implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="turno_id")
 	private Turno turno;
-	
-
-
-
 }

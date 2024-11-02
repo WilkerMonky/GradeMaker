@@ -50,7 +50,17 @@ public class ProfessorController {
 			return ResponseEntity.internalServerError().body(new ApiResponse("Id não encontrado", null));
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.ok(new ApiResponse("Não foi localizar Professor, tente novamente", null));
+			return ResponseEntity.ok(new ApiResponse("Não foi possivel localizar Professor, tente novamente", null));
+		}
+	}
+
+	@GetMapping("/nome/{nome}")
+	public ResponseEntity<ApiResponse> getByNome(@PathVariable String nome) {
+		try {
+			return ResponseEntity.ok(new ApiResponse("Professor encontrado", professorService.getByNome(nome)));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.ok(new ApiResponse("Não foi possivel localizar Professor, tente novamente", null));
 		}
 	}
 

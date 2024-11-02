@@ -1,5 +1,6 @@
 package com.datamonki.APIsCadastro.service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -23,7 +24,6 @@ import com.datamonki.APIsCadastro.response.ApiResponse;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import java.util.List;
 
 @Service
 public class ProfessorDisciplinaService {
@@ -63,10 +63,10 @@ public class ProfessorDisciplinaService {
 		professorDisciplina.setDisciplina(disciplina.get());
 		professorDisciplinaRepository.save(professorDisciplina);
 
-		ProfessorDto professorDto = new ProfessorDto(professor.get().getId(), professor.get().getNome());
-		DisciplinaDto disciplinaDto = new DisciplinaDto(disciplina.get().getId(), disciplina.get().getNome(), disciplina.get().getCarga_horaria());
+		ProfessorDto professorDto = new ProfessorDto(professor.get().getNome());
+		DisciplinaDto disciplinaDto = new DisciplinaDto(disciplina.get().getNome());
 		ProfessorDisciplinaDto professorDisciplinaDto = new ProfessorDisciplinaDto(professorDto, disciplinaDto);
-		return ResponseEntity.ok(new ApiResponse("Relacionamento salvo com sucesso ", professorDisciplinaDto));
+		return ResponseEntity.ok(new ApiResponse("Relacionamento salvo", professorDisciplinaDto));
 
 	}
 
@@ -96,8 +96,8 @@ public class ProfessorDisciplinaService {
 	public ProfessorDisciplinaDto convertToDto(ProfessorDisciplina professorDisciplina) {
 		Professor professor = professorDisciplina.getProfessor();
 		Disciplina disciplina = professorDisciplina.getDisciplina();
-		ProfessorDto professorDto = new ProfessorDto(professor.getId(), professor.getNome());
-		DisciplinaDto disciplinaDto = new DisciplinaDto(disciplina.getId(), disciplina.getNome(), disciplina.getCarga_horaria());
+		ProfessorDto professorDto = new ProfessorDto(professor.getNome());
+		DisciplinaDto disciplinaDto = new DisciplinaDto(disciplina.getNome());
 		return new ProfessorDisciplinaDto(professorDto, disciplinaDto);
 	}
 

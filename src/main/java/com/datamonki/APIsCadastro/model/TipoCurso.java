@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "TIPO_CURSO")
+@Table(name = "tipo_curso")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -33,7 +33,7 @@ public class TipoCurso implements Serializable {
 	private Integer id;
 
 	@Column
-	@NotBlank(message = "Nome não pode ser vazio")
+	@NotBlank
 	private String nome;
 
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

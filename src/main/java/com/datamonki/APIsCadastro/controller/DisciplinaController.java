@@ -62,6 +62,16 @@ public class DisciplinaController {
 		}
 	}
 
+	@GetMapping("/nome/{nome}")
+	public ResponseEntity<ApiResponse> getByNome(@PathVariable String nome) {
+		try {
+			return disciplinaService.getByNome(nome);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.ok(new ApiResponse("Não foi possivel localizar Disciplina, tente novamente", null));
+		}
+	}
+
 	@DeleteMapping("/{id}")
 	public ResponseEntity<ApiResponse> delete(@PathVariable Integer id) {
 		try {

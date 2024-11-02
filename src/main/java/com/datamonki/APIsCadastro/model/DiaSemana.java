@@ -14,10 +14,7 @@ public class DiaSemana {
 	private Integer id;
 	private String nome;
 	
-	
 	public static DiaSemana retornar_dia_semana(@NotNull Integer dia_semana_id) {
-		// TODO Auto-generated method stub
 		return null;
 	}
-	
 }

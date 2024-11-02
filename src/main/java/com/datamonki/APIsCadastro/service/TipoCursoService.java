@@ -42,19 +42,19 @@ public class TipoCursoService {
 		tipoCurso.setNome(tipoCursoDto.nome());
 		 tipoCursoRepository.save(tipoCurso);
 		 
-		 return ResponseEntity.ok(new ApiResponse("Tipo do curso criado", tipoCurso));
+		 return ResponseEntity.ok(new ApiResponse("Tipo do curso cadastrado com sucesso", tipoCurso)); 
 		 
 	}
 
 	public ResponseEntity<ApiResponse> getById(Integer id) {
 		verificarId(id);
 		TipoCurso tipoCurso = tipoCursoRepository.findById(id).get();
-		return ResponseEntity.ok(new ApiResponse("Localizado", tipoCurso));
+		return ResponseEntity.ok(new ApiResponse("Tipo do curso localizado com sucesso", tipoCurso));
 	}
 
 	public ResponseEntity<ApiResponse> getAll() {
 		List<TipoCurso> tiposCurso = tipoCursoRepository.findAll();
-		return ResponseEntity.ok(new ApiResponse("Lista tipos de curso", tiposCurso));
+		return ResponseEntity.ok(new ApiResponse("Lista de tipos de curso cadastrados", tiposCurso));
 	}
 
 	@Transactional
@@ -65,13 +65,13 @@ public class TipoCursoService {
 		tipoCurso.setId(id);
 		tipoCurso.setNome(tipoCursoDto.nome());
 		tipoCursoRepository.save(tipoCurso);
-		return ResponseEntity.ok(new ApiResponse("Alterado com sucesso", tipoCurso));
+		return ResponseEntity.ok(new ApiResponse("Tipo do curso alterado com sucesso", tipoCurso));
 	}
 
 	public ResponseEntity<ApiResponse> delete(Integer id) {
 		verificarId(id);
 		TipoCurso tipoCurso = tipoCursoRepository.findById(id).get();
 		tipoCursoRepository.deleteById(id);
-		return ResponseEntity.ok(new ApiResponse("Deletado com sucesso", tipoCurso));
+		return ResponseEntity.ok(new ApiResponse("Tipo do curso deletado com sucesso", tipoCurso));
 	}
 }

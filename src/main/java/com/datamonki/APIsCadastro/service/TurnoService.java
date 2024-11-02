@@ -17,6 +17,6 @@ public class TurnoService {
 	
 	public ResponseEntity<ApiResponse> getAll(){
 		List<Turno> turnos  = turnoRepository.findAll();
-		return ResponseEntity.ok(new ApiResponse("Turnos", turnos));
+		return ResponseEntity.ok(new ApiResponse("Lista de turnos cadastrados", turnos));
 	}
 }

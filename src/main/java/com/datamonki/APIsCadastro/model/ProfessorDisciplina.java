@@ -1,6 +1,5 @@
 package com.datamonki.APIsCadastro.model;
 
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.EmbeddedId;
@@ -17,10 +16,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProfessorDisciplina {
-	
-	
-	
-	
 	@EmbeddedId
 	private ProfessorDisciplinaId id;
 	
@@ -42,6 +37,4 @@ public class ProfessorDisciplina {
     public ProfessorDisciplina(ProfessorDisciplinaId id) {
         this.id = id;
     }
-
-	
 }
