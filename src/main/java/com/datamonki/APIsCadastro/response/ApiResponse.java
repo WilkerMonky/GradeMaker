@@ -3,7 +3,7 @@ import com.google.gson.Gson;
 
 public class ApiResponse {
 	private String message;
-	private Object data;
+	private Object data; 
 
 	public ApiResponse(String message, Object data) {
 		this.message = message;

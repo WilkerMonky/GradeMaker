@@ -49,18 +49,18 @@ public class CursoService {
 		curso.setNome(cursoDto.nome());
 		curso.setTipoCurso(tipoCursoRepository.findById(cursoDto.tipoCursoId()).get());
 		cursoRepository.save(curso);
-		return ResponseEntity.ok(new ApiResponse("Curso criado com sucesso", curso));
+		return ResponseEntity.ok(new ApiResponse("Curso cadastrado com sucesso", curso)); 
 	}
 
 	public ResponseEntity<ApiResponse> getById(Integer id) {
 		verificarId(id);
 		Curso curso =  cursoRepository.findById(id).get();
-		return ResponseEntity.ok(new ApiResponse("Curso localizado", curso));
+		return ResponseEntity.ok(new ApiResponse("Curso localizado com sucesso", curso));
 	}
 
 	public ResponseEntity<ApiResponse> getAll() {
 		List<Curso> cursos  = cursoRepository.findAll();
-		return ResponseEntity.ok(new ApiResponse("Lista de cursos", cursos));
+		return ResponseEntity.ok(new ApiResponse("Lista de cursos cadastrados", cursos));  
 	}
 
 	@Transactional

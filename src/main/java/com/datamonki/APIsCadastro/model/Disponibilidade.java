@@ -40,7 +40,7 @@ public class Disponibilidade  implements Serializable {
 	
 	@ManyToOne
 	@JoinColumn(name= "professor_id")
-	@NotNull(message = "Professor_id não pode ser nulo")
+	@NotNull
 	private Professor professor;
 	
 	@ManyToOne
@@ -50,6 +50,4 @@ public class Disponibilidade  implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="turno_id")
 	private Turno turno;
-	
-
 }

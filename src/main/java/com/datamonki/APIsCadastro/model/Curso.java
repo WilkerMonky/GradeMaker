@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "CURSO")
+@Table(name = "curso")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -35,7 +35,7 @@ public class Curso implements Serializable {
 	private Integer id;
 
 	@Column
-	@NotBlank(message = "Nome não pode ser vazio")
+	@NotBlank
 	private String nome;
 
 	@ManyToOne
@@ -45,6 +45,4 @@ public class Curso implements Serializable {
 	@OneToMany(mappedBy = "curso")
 	@JsonIgnore
 	private Set<Oferta> ofertas = new HashSet<>();
-
-
 }

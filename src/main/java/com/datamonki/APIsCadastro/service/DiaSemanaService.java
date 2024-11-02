@@ -18,7 +18,7 @@ public class DiaSemanaService {
 	
 	public ResponseEntity<ApiResponse> getAll(){
 		List<DiaSemana> diasSemana = diaSemanaRepository.findAll();
-		return ResponseEntity.ok(new ApiResponse("Dias da semana", diasSemana));
+		return ResponseEntity.ok(new ApiResponse("Lista de dias da semana", diasSemana));
 
 	}
 	

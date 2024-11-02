@@ -14,7 +14,7 @@ import com.datamonki.APIsCadastro.repository.ProfessorRepository;
 
 import jakarta.transaction.Transactional;
 
-@Service
+@Service 
 public class ProfessorService {
 
 	@Autowired
@@ -51,6 +51,10 @@ public class ProfessorService {
 
 	public List<Professor> getAll() {
 		return professorRepository.findAll();
+	}
+
+	public List<Professor> getByNome(String nome) {
+		return professorRepository.findByNomeContainingIgnoreCase(nome);
 	}
 
 	@Transactional

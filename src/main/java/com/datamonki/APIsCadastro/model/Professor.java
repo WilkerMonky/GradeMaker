@@ -32,7 +32,7 @@ public class Professor  implements Serializable {
 	private Integer id;
 	
 	@Column
-	@NotBlank(message = "Nome não pode ser vazio")
+	@NotBlank
 	private String nome;
 	
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -41,8 +41,3 @@ public class Professor  implements Serializable {
 	
 	
 }
-
-	
-
-
-
