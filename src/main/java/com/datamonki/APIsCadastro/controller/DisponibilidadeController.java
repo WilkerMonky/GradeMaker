@@ -94,4 +94,20 @@ public class DisponibilidadeController {
 			return ResponseEntity.ok(new ApiResponse("Não foi possivel editar Disponibilidade, tente novamente", null));
 		}
 	}
+	@GetMapping("verificarProfessor/{id}")
+	public ResponseEntity<ApiResponse> update(@PathVariable Integer id){
+		try {
+			return disponibilidadeService.verifyDisponibilidadeProfessor(id);
+		} catch (IdNaoEncontradoException e) {
+			e.printStackTrace();
+			return ResponseEntity.internalServerError().body(new ApiResponse("Id não encontrado", null));
+		} catch (ValidarException e) {
+			e.printStackTrace();
+			return ResponseEntity.internalServerError()
+					.body(new ApiResponse("Entrada invalida, verifique e tente novamente", null));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.ok(new ApiResponse("Não foi possivel editar Disponibilidade, tente novamente", null));
+		}
+	}
 }

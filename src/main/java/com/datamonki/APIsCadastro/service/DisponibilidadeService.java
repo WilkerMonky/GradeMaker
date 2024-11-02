@@ -3,6 +3,7 @@ package com.datamonki.APIsCadastro.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.datamonki.APIsCadastro.exception.ValidarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import com.datamonki.APIsCadastro.repository.TurnoRepository;
 import com.datamonki.APIsCadastro.response.ApiResponse;
 
 import jakarta.transaction.Transactional;
+import org.springframework.web.ErrorResponseException;
 
 @Service
 public class DisponibilidadeService {
@@ -54,11 +56,14 @@ public class DisponibilidadeService {
 			throw new IdNaoEncontradoException("Dia da Semana com ID " + disponibilidadeDto.diaSemanaId() + " não encontrado");
 		}else if(turno.isEmpty()) {
 			throw new IdNaoEncontradoException("Turno com ID " + disponibilidadeDto.turnoId() + " não encontrado");
+		}else if (disponibilidadeRepository.verifyRepeticao(disponibilidadeDto.professorId(),
+				disponibilidadeDto.diaSemanaId(), disponibilidadeDto.turnoId(), disponibilidadeDto.semestre(), disponibilidadeDto.ano())){
+			throw  new ValidarException("Disponibilidade já agendada");
 		}
-		
-		
+
+
 	}
-	
+
 
 	@Transactional
 	public ResponseEntity<ApiResponse> save(DisponibilidadeDto disponibilidadeDto) {
@@ -113,5 +118,10 @@ public class DisponibilidadeService {
 		Disponibilidade disponibilidade = disponibilidadeRepository.findById(id).get();
 		disponibilidadeRepository.deleteById(id);
 		return ResponseEntity.ok(new ApiResponse("Disponibilidade deletada com sucesso", disponibilidade));
+	}
+
+	public ResponseEntity<ApiResponse> verifyDisponibilidadeProfessor (Integer professorId){
+		Integer numRegistros = disponibilidadeRepository.verifyDisponibilidadeProfessor(professorId);
+		return  ResponseEntity.ok(new ApiResponse("Sucesso! Número de disponibilidades para o professor selecionado", numRegistros));
 	}
 }
