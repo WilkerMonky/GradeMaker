@@ -113,7 +113,44 @@ public class DisponibilidadeController {
 			return ResponseEntity.internalServerError().body(new ApiResponse(e.getMessage(), null));
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.ok(new ApiResponse("Não foi possivel editar Disponibilidade, tente novamente", null));
+			return ResponseEntity.ok(new ApiResponse("Não foi possivel verificar numero de Disponibilidades, tente novamente", null));
 		}
 	}
+
+	//Faz a requisicao para verificar a disponibilidade de um professor pelo id
+	@GetMapping("professor/{id}")
+	public ResponseEntity<ApiResponse> getByProfessorId(@PathVariable Integer id){
+		try {
+			return disponibilidadeService.getByIdProfessor(id);
+		} catch (IdNotFoundException e) {
+			e.printStackTrace();
+			return ResponseEntity.internalServerError().body(new ApiResponse(e.getMessage(), null));
+		} catch (ValidationException e) {
+			e.printStackTrace();
+			return ResponseEntity.internalServerError().body(new ApiResponse(e.getMessage(), null));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.ok(new ApiResponse("Não foi possivel puxar Disponibilidade, tente novamente", null));
+		}
+	}
+
+
+	//Faz a requisicao para verificar a disponibilidade de um professor pelo id
+	@DeleteMapping("professor/{id}")
+	public ResponseEntity<ApiResponse> deletetByProfessorId(@PathVariable Integer id){
+		try {
+			return disponibilidadeService.deleteByIdProfessor(id);
+		} catch (IdNotFoundException e) {
+			e.printStackTrace();
+			return ResponseEntity.internalServerError().body(new ApiResponse(e.getMessage(), null));
+		} catch (ValidationException e) {
+			e.printStackTrace();
+			return ResponseEntity.internalServerError().body(new ApiResponse(e.getMessage(), null));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.internalServerError().body(new ApiResponse("Não foi possivel deletar Disponibilidade, tente novamente", null));
+		}
+	}
+
+
 }
