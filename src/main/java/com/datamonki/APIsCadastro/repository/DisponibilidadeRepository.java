@@ -14,10 +14,16 @@ import java.util.List;
 public interface DisponibilidadeRepository extends JpaRepository<Disponibilidade, Integer> {
 
         @Query (value = "SELECT COUNT(*) FROM  disponibilidade WHERE professor_id=:professorId", nativeQuery = true)
-        Integer verifyDisponibilidadeProfessor(@Param("professorId") Integer professorId);
+        Integer getNumDisponibilidadeProfessor(@Param("professorId") Integer professorId);
 
 
-        @Query (
+        @Query (value = "SELECT  CASE WHEN COUNT(*) >0 THEN true ELSE false END " +
+                "FROM  disponibilidade WHERE professor_id=:professorId", nativeQuery = true)
+        Boolean verifyDisponibilidadeProfessor(@Param("professorId") Integer professorId);
+
+
+
+    @Query (
                 value = "SELECT CASE WHEN COUNT (*) > 0 THEN  true ELSE false END " +
                         " FROM disponibilidade"  +
                         " WHERE professor_id=:professorId AND dia_semana_id=:diaSemanaId AND turno_id=:turnoId " +

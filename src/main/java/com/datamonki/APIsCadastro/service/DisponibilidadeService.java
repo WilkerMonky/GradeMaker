@@ -141,7 +141,7 @@ public class DisponibilidadeService {
 
 	//Verifica se o professor tem disponibilidade
 	public ResponseEntity<ApiResponse> verifyDisponibilidadeProfessor (Integer professorId){
-		Integer numRegistros = disponibilidadeRepository.verifyDisponibilidadeProfessor(professorId);
+		Integer numRegistros = disponibilidadeRepository.getNumDisponibilidadeProfessor(professorId);
 		return  ResponseEntity.ok(new ApiResponse("Sucesso! Número de disponibilidades para o professor selecionado", numRegistros));
 	}
 
@@ -153,8 +153,14 @@ public class DisponibilidadeService {
 
 	public ResponseEntity<ApiResponse> deleteByIdProfessor (Integer professorId){
 		verificarProfessorId(professorId);
-		disponibilidadeRepository.deleteByIdProfessor(professorId);
-		return ResponseEntity.ok(new ApiResponse("Disponibilidades deletadas com sucesso", null));
+		if (disponibilidadeRepository.verifyDisponibilidadeProfessor(professorId)){
+			disponibilidadeRepository.deleteByIdProfessor(professorId);
+			return ResponseEntity.ok(new ApiResponse("Disponibilidades deletadas com sucesso", null));
+		}
+
+		return ResponseEntity.ok(new ApiResponse("Sem disponibilidades cadastradas", null));
+
+
 	}
 	
 

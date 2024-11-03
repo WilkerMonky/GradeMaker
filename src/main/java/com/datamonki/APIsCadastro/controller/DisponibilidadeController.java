@@ -36,7 +36,7 @@ public class DisponibilidadeController {
 			return ResponseEntity.internalServerError().body(new ApiResponse(e.getMessage(), null));
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.ok(new ApiResponse("Não foi possivel criar Disponibilidade, tente novamente", null));
+			return ResponseEntity.internalServerError().body(new ApiResponse("Não foi possivel criar Disponibilidade, tente novamente", null));
 		}
 
 	}
