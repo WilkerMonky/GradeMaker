@@ -12,26 +12,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.datamonki.APIsCadastro.dto.DisponibilidadeDto;
-import com.datamonki.APIsCadastro.exception.IdNaoEncontradoException;
-import com.datamonki.APIsCadastro.exception.ValidarException;
+import com.datamonki.APIsCadastro.exception.IdNotFoundException;
+import com.datamonki.APIsCadastro.exception.ValidationException;
 import com.datamonki.APIsCadastro.response.ApiResponse;
 import com.datamonki.APIsCadastro.service.DisponibilidadeService;
 
+//Classe que representa o controller, responsavel pelas requisicoes de disponibilidade para a api
 @RestController
 @RequestMapping("/api/disponibilidade")
 public class DisponibilidadeController {
 
+	//Injeta o service de disponibilidade
 	@Autowired
 	private DisponibilidadeService disponibilidadeService;
 
+	//Faz a requisicao para criar uma disponibilidade
 	@PostMapping
 	public ResponseEntity<ApiResponse> save(@RequestBody DisponibilidadeDto disponibilidadeDto) {
 		try {
 			return disponibilidadeService.save(disponibilidadeDto);
-		} catch (ValidarException e) {
+		} catch (ValidationException e) {
 			e.printStackTrace();
-			return ResponseEntity.internalServerError()
-					.body(new ApiResponse("Entrada invalida, verifique e tente novamente", null));
+			return ResponseEntity.internalServerError().body(new ApiResponse(e.getMessage(), null));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new ApiResponse("Não foi possivel criar Disponibilidade, tente novamente", null));
@@ -39,20 +41,22 @@ public class DisponibilidadeController {
 
 	}
 
+	//Faz a requisicao para buscar uma disponibilidade pelo id
 	@GetMapping("/{id}")
 	public ResponseEntity<ApiResponse> getById(@PathVariable Integer id) {
 		try {
 			return disponibilidadeService.getById(id);
 
-		} catch (IdNaoEncontradoException e) {
+		} catch (IdNotFoundException e) {
 			e.printStackTrace();
-			return ResponseEntity.internalServerError().body(new ApiResponse("Id não encontrado", null));
+			return ResponseEntity.internalServerError().body(new ApiResponse(e.getMessage(), null));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new ApiResponse("Não foi localizar Disponibilidade, tente novamente", null));
 		}
 	}
 
+	//Faz a requisicao para buscar todas as disponibilidades
 	@GetMapping
 	public ResponseEntity<ApiResponse> getAll() {
 		try {
@@ -63,13 +67,14 @@ public class DisponibilidadeController {
 		}
 	}
 
+	//Faz a requisicao para deletar uma disponibilidade pelo id
 	@DeleteMapping("/{id}")
 	public ResponseEntity<ApiResponse> delete(@PathVariable Integer id) {
 		try {
 			return disponibilidadeService.delete(id);
-		} catch (IdNaoEncontradoException e) {
+		} catch (IdNotFoundException e) {
 			e.printStackTrace();
-			return ResponseEntity.internalServerError().body(new ApiResponse("Id não encontrado", null));
+			return ResponseEntity.internalServerError().body(new ApiResponse(e.getMessage(), null));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity
@@ -77,70 +82,38 @@ public class DisponibilidadeController {
 		}
 	}
 
+	//Faz a requisicao para atualizar uma disponibilidade pelo id
 	@PutMapping("/{id}")
 	public ResponseEntity<ApiResponse> update(@PathVariable Integer id,
 			@RequestBody DisponibilidadeDto disponibilidadeDto) {
 		try {
 			return disponibilidadeService.update(id, disponibilidadeDto);
-		} catch (IdNaoEncontradoException e) {
+		} catch (IdNotFoundException e) {
 			e.printStackTrace();
-			return ResponseEntity.internalServerError().body(new ApiResponse("Id não encontrado", null));
-		} catch (ValidarException e) {
+			return ResponseEntity.internalServerError().body(new ApiResponse(e.getMessage(), null));
+		} catch (ValidationException e) {
 			e.printStackTrace();
-			return ResponseEntity.internalServerError()
-					.body(new ApiResponse("Entrada invalida, verifique e tente novamente", null));
+			return ResponseEntity.internalServerError().body(new ApiResponse(e.getMessage(), null));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new ApiResponse("Não foi possivel editar Disponibilidade, tente novamente", null));
 		}
 	}
+	
+	//Faz a requisicao para verificar a disponibilidade de um professor pelo id
 	@GetMapping("verificarProfessor/{id}")
-	public ResponseEntity<ApiResponse> verifyDispProfessor(@PathVariable Integer id){
+	public ResponseEntity<ApiResponse> update(@PathVariable Integer id){
 		try {
 			return disponibilidadeService.verifyDisponibilidadeProfessor(id);
-		} catch (IdNaoEncontradoException e) {
+		} catch (IdNotFoundException e) {
 			e.printStackTrace();
-			return ResponseEntity.internalServerError().body(new ApiResponse("Id não encontrado", null));
-		} catch (ValidarException e) {
+			return ResponseEntity.internalServerError().body(new ApiResponse(e.getMessage(), null));
+		} catch (ValidationException e) {
 			e.printStackTrace();
-			return ResponseEntity.internalServerError()
-					.body(new ApiResponse("Entrada invalida, verifique e tente novamente", null));
+			return ResponseEntity.internalServerError().body(new ApiResponse(e.getMessage(), null));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new ApiResponse("Não foi possivel editar Disponibilidade, tente novamente", null));
 		}
 	}
-	@GetMapping("professor/{id}")
-	public ResponseEntity<ApiResponse> getByIdProfessor(@PathVariable Integer id){
-		try {
-			return disponibilidadeService.getByIdProfessor(id);
-		} catch (IdNaoEncontradoException e) {
-			e.printStackTrace();
-			return ResponseEntity.internalServerError().body(new ApiResponse("Id não encontrado", null));
-		} catch (ValidarException e) {
-			e.printStackTrace();
-			return ResponseEntity.internalServerError()
-					.body(new ApiResponse("Entrada invalida, verifique e tente novamente", null));
-		} catch (Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.ok(new ApiResponse("Não foi possivel editar Disponibilidade, tente novamente", null));
-		}
-	}
-	@DeleteMapping("professor/{id}")
-	public ResponseEntity<ApiResponse> deleteByIdProfessor(@PathVariable Integer id){
-		try {
-			return disponibilidadeService.deletetByIdProfessor(id);
-		} catch (IdNaoEncontradoException e) {
-			e.printStackTrace();
-			return ResponseEntity.internalServerError().body(new ApiResponse("Id não encontrado", null));
-		} catch (ValidarException e) {
-			e.printStackTrace();
-			return ResponseEntity.internalServerError()
-					.body(new ApiResponse("Entrada invalida, verifique e tente novamente", null));
-		} catch (Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.ok(new ApiResponse("Não foi possivel deletar Disponibilidade, tente novamente", null));
-		}
-	}
-
 }

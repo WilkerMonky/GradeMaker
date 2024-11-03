@@ -7,8 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.datamonki.APIsCadastro.model.Disponibilidade;
 
-import java.util.List;
-
+// ultiliza o jpaRepository para implementar as operacoes de CRUD
 @Repository
 public interface DisponibilidadeRepository extends JpaRepository<Disponibilidade, Integer> {
 
@@ -24,11 +23,5 @@ public interface DisponibilidadeRepository extends JpaRepository<Disponibilidade
         Boolean verifyRepeticao(@Param("professorId")
                                 Integer professorId, @Param("diaSemanaId") Integer diaSemanaId,
                                 @Param("turnoId") Integer turnoID, @Param("semestre") Integer semestre, @Param("ano") Integer ano);
-
-    @Query (value = "SELECT * FROM  disponibilidade WHERE professor_id=:professorId", nativeQuery = true)
-    List<Disponibilidade> findByIdProfessor(@Param("professorId") Integer professorId);
-
-    @Query (value = "DELETE FROM  disponibilidade WHERE professor_id=:professorId", nativeQuery = true)
-    void deleteByIdProfessor(@Param("professorId") Integer professorId);
 
 }

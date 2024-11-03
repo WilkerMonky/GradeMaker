@@ -15,6 +15,7 @@ public class TurnoService {
 	@Autowired
 	TurnoRepository turnoRepository;
 	
+	//Retorna todos os turnos
 	public ResponseEntity<ApiResponse> getAll(){
 		List<Turno> turnos  = turnoRepository.findAll();
 		return ResponseEntity.ok(new ApiResponse("Lista de turnos cadastrados", turnos));

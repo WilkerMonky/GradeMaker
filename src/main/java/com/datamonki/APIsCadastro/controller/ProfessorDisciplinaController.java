@@ -9,11 +9,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.datamonki.APIsCadastro.exception.ValidarException;
+import com.datamonki.APIsCadastro.exception.ValidationException;
 import com.datamonki.APIsCadastro.model.ProfessorDisciplinaId;
 import com.datamonki.APIsCadastro.response.ApiResponse;
 import com.datamonki.APIsCadastro.service.ProfessorDisciplinaService;
 
+//Classe que representa o controller, responsavel pelas requisicoes de professor disciplina para a api
 @RestController
 @RequestMapping(path = "/api/professor_disciplina")
 public class ProfessorDisciplinaController {
@@ -25,7 +26,7 @@ public class ProfessorDisciplinaController {
 	public ResponseEntity<ApiResponse> save(@RequestBody ProfessorDisciplinaId professorDisciplinaId) {
 		try {
 			return professorDisciplinaService.save(professorDisciplinaId);
-		} catch (ValidarException e) {
+		} catch (ValidationException e) {
 			return ResponseEntity.internalServerError()
 					.body(new ApiResponse("Entrada invalida, verifique e tente novamente", null));
 		} catch (Exception e) {

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import com.datamonki.APIsCadastro.dto.DisciplinaDto;
 import com.datamonki.APIsCadastro.dto.ProfessorDisciplinaDto;
 import com.datamonki.APIsCadastro.dto.ProfessorDto;
-import com.datamonki.APIsCadastro.exception.IdNaoEncontradoException;
+import com.datamonki.APIsCadastro.exception.IdNotFoundException;
 import com.datamonki.APIsCadastro.model.Disciplina;
 import com.datamonki.APIsCadastro.model.Professor;
 import com.datamonki.APIsCadastro.model.ProfessorDisciplina;
@@ -28,29 +28,34 @@ import jakarta.validation.Valid;
 @Service
 public class ProfessorDisciplinaService {
 
+	//Injeta o repositorio de professor disciplina
 	@Autowired
 	private ProfessorDisciplinaRepository professorDisciplinaRepository;
 
+	//Injeta o repositorio de professor
 	@Autowired
 	private ProfessorRepository professorRepository;
 
+	//Injeta o repositorio de disciplina
 	@Autowired
 	private DisciplinaRepository disciplinaRepository;
 
+	//Verifica se o id do professor e da disciplina existe
 	public void verificarIds(ProfessorDisciplinaId professorDisciplinaId) {
 		Optional<Professor> professor = professorRepository.findById(professorDisciplinaId.getProfessorId());
 		Optional<Disciplina> disciplina = disciplinaRepository.findById(professorDisciplinaId.getDisciplinaId());
 
 		if (professor.isEmpty()) {
-			throw new IdNaoEncontradoException(
+			throw new IdNotFoundException( 
 					"Professor com ID " + professorDisciplinaId.getProfessorId() + " não encontrado");
 		}
 		if (disciplina.isEmpty()) {
-			throw new IdNaoEncontradoException(
+			throw new IdNotFoundException(
 					"Disciplina com ID " + professorDisciplinaId.getDisciplinaId() + " não encontrada");
 		}
 	}
 
+	//Salva o relacionamento entre professor e disciplina
 	@Transactional
 	public ResponseEntity<ApiResponse> save(@Valid ProfessorDisciplinaId professorDisciplinaId) {
 
@@ -70,6 +75,7 @@ public class ProfessorDisciplinaService {
 
 	}
 
+	//Retorna todos os relacionamentos entre professor e disciplina
 	public ResponseEntity<ApiResponse> getAll() {
 		List<ProfessorDisciplina> professorDisciplinas = professorDisciplinaRepository.findAll();
 		List<ProfessorDisciplinaDto> professorDisciplinaDtos = professorDisciplinas.stream().map(this::convertToDto)
@@ -78,6 +84,7 @@ public class ProfessorDisciplinaService {
 		return ResponseEntity.ok(new ApiResponse("Professores indexados com disciplinas", professorDisciplinaDtos));
 	}
 
+	//Deleta o relacionamento entre professor e disciplina
 	public ResponseEntity<ApiResponse> delete(ProfessorDisciplinaId professorDisciplinaId) {
 		verificarIds(professorDisciplinaId);
 		Optional<ProfessorDisciplina> professorDisciplina = professorDisciplinaRepository
@@ -93,6 +100,7 @@ public class ProfessorDisciplinaService {
 		}
 	}
 
+	//Converte o relacionamento entre professor e disciplina para dto
 	public ProfessorDisciplinaDto convertToDto(ProfessorDisciplina professorDisciplina) {
 		Professor professor = professorDisciplina.getProfessor();
 		Disciplina disciplina = professorDisciplina.getDisciplina();

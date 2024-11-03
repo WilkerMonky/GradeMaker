@@ -12,26 +12,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.datamonki.APIsCadastro.dto.OfertaDto;
-import com.datamonki.APIsCadastro.exception.IdNaoEncontradoException;
-import com.datamonki.APIsCadastro.exception.ValidarException;
+import com.datamonki.APIsCadastro.exception.IdNotFoundException;
+import com.datamonki.APIsCadastro.exception.ValidationException;
 import com.datamonki.APIsCadastro.response.ApiResponse;
 import com.datamonki.APIsCadastro.service.OfertaService;
 
+//Classe que representa o controller, responsavel pelas requisicoes de oferta para a api
 @RestController
 @RequestMapping("/api/oferta")
 public class OfertaController {
 
+	//Injeta o service de oferta
 	@Autowired
 	private OfertaService ofertaService;
 
+	//Faz a requisicao para criar uma oferta
 	@PostMapping
 	public ResponseEntity<ApiResponse> save(@RequestBody OfertaDto ofertaDto) {
 		try {
 			return ofertaService.save(ofertaDto);
-		} catch (ValidarException e) {
+		} catch (ValidationException e) {
 			e.printStackTrace();
-			return ResponseEntity.internalServerError()
-					.body(new ApiResponse("Entrada invalida, verifique e tente novamente", null));
+			return ResponseEntity.internalServerError().body(new ApiResponse(e.getMessage(), null));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new ApiResponse("Não foi possivel criar Oferta, tente novamente", null));
@@ -39,20 +41,22 @@ public class OfertaController {
 
 	}
 
+	//Faz a requisicao para buscar uma oferta pelo id
 	@GetMapping("/{id}")
 	public ResponseEntity<ApiResponse> getById(@PathVariable Integer id) {
 		try {
 			return ofertaService.getById(id);
 
-		} catch (IdNaoEncontradoException e) {
+		} catch (IdNotFoundException e) {
 			e.printStackTrace();
-			return ResponseEntity.internalServerError().body(new ApiResponse("Id não encontrado", null));
+			return ResponseEntity.internalServerError().body(new ApiResponse(e.getMessage(), null));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new ApiResponse("Não foi localizar Oferta, tente novamente", null));
 		}
 	}
 
+	//Faz a requisicao para buscar todas as ofertas
 	@GetMapping
 	public ResponseEntity<ApiResponse> getAll() {
 		try {
@@ -63,30 +67,31 @@ public class OfertaController {
 		}
 	}
 
+	//Faz a requisicao para deletar uma oferta pelo id
 	@DeleteMapping("/{id}")
 	public ResponseEntity<ApiResponse> delete(@PathVariable Integer id) {
 		try {
 			return ofertaService.delete(id);
-		} catch (IdNaoEncontradoException e) {
+		} catch (IdNotFoundException e) {
 			e.printStackTrace();
-			return ResponseEntity.internalServerError().body(new ApiResponse("Id não encontrado", null));
+			return ResponseEntity.internalServerError().body(new ApiResponse(e.getMessage(), null));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new ApiResponse("Não foi possivel deletar Oferta, tente novamente", null));
 		}
 	}
 
+	//Faz a requisicao para atualizar uma oferta pelo id
 	@PutMapping("/{id}")
 	public ResponseEntity<ApiResponse> update(@PathVariable Integer id, @RequestBody OfertaDto ofertaDto) {
 		try {
 			return ofertaService.update(id, ofertaDto);
-		} catch (IdNaoEncontradoException e) {
+		} catch (IdNotFoundException e) {
 			e.printStackTrace();
-			return ResponseEntity.internalServerError().body(new ApiResponse("Id não encontrado", null));
-		} catch (ValidarException e) {
+			return ResponseEntity.internalServerError().body(new ApiResponse(e.getMessage(), null));
+		} catch (ValidationException e) {
 			e.printStackTrace();
-			return ResponseEntity.internalServerError()
-					.body(new ApiResponse("Entrada invalida, verifique e tente novamente", null));
+			return ResponseEntity.internalServerError().body(new ApiResponse(e.getMessage(), null));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(new ApiResponse("Não foi possivel editar Oferta, tente novamente", null));
