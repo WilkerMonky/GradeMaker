@@ -3,6 +3,7 @@ package com.datamonki.APIsCadastro.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -147,7 +148,14 @@ public class DisponibilidadeService {
 
 	public ResponseEntity<ApiResponse> getByIdProfessor(Integer professorId) {
 		verificarProfessorId(professorId);
-		List<Disponibilidade> listaDisponibilidade = disponibilidadeRepository.findByIdProfessor(professorId);
+		List<Object[]> results = disponibilidadeRepository.findDisponibilidadeByProfessorId(professorId);
+		List<DisponibilidadeDto> listaDisponibilidade = results.stream().map(result -> new DisponibilidadeDto(
+				(Integer) result[0],  // id
+				(Integer) result[1],  // ano
+				(Integer) result[2],  // semestre
+				(Integer) result[3],  // diaSemanaId
+				(Integer) result[4]   // turnoId
+		)).collect(Collectors.toList());
 		return ResponseEntity.ok(new ApiResponse("Disponibilidade localizada com sucesso", listaDisponibilidade));
 	}
 
