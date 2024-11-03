@@ -95,7 +95,7 @@ public class DisponibilidadeController {
 		}
 	}
 	@GetMapping("verificarProfessor/{id}")
-	public ResponseEntity<ApiResponse> update(@PathVariable Integer id){
+	public ResponseEntity<ApiResponse> verifyDispProfessor(@PathVariable Integer id){
 		try {
 			return disponibilidadeService.verifyDisponibilidadeProfessor(id);
 		} catch (IdNaoEncontradoException e) {
@@ -110,4 +110,37 @@ public class DisponibilidadeController {
 			return ResponseEntity.ok(new ApiResponse("Não foi possivel editar Disponibilidade, tente novamente", null));
 		}
 	}
+	@GetMapping("professor/{id}")
+	public ResponseEntity<ApiResponse> getByIdProfessor(@PathVariable Integer id){
+		try {
+			return disponibilidadeService.getByIdProfessor(id);
+		} catch (IdNaoEncontradoException e) {
+			e.printStackTrace();
+			return ResponseEntity.internalServerError().body(new ApiResponse("Id não encontrado", null));
+		} catch (ValidarException e) {
+			e.printStackTrace();
+			return ResponseEntity.internalServerError()
+					.body(new ApiResponse("Entrada invalida, verifique e tente novamente", null));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.ok(new ApiResponse("Não foi possivel editar Disponibilidade, tente novamente", null));
+		}
+	}
+	@DeleteMapping("professor/{id}")
+	public ResponseEntity<ApiResponse> deleteByIdProfessor(@PathVariable Integer id){
+		try {
+			return disponibilidadeService.deletetByIdProfessor(id);
+		} catch (IdNaoEncontradoException e) {
+			e.printStackTrace();
+			return ResponseEntity.internalServerError().body(new ApiResponse("Id não encontrado", null));
+		} catch (ValidarException e) {
+			e.printStackTrace();
+			return ResponseEntity.internalServerError()
+					.body(new ApiResponse("Entrada invalida, verifique e tente novamente", null));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.ok(new ApiResponse("Não foi possivel deletar Disponibilidade, tente novamente", null));
+		}
+	}
+
 }

@@ -43,6 +43,11 @@ public class DisponibilidadeService {
 			throw new IdNaoEncontradoException();
 		}
 	}
+	private void verificarIdProf(Integer id) {
+		if(!professorRepository.existsById(id)){
+			throw  new IdNaoEncontradoException();
+		}
+	}
 	
 	
 	private void verificar(DisponibilidadeDto disponibilidadeDto) {
@@ -121,7 +126,22 @@ public class DisponibilidadeService {
 	}
 
 	public ResponseEntity<ApiResponse> verifyDisponibilidadeProfessor (Integer professorId){
+		verificarIdProf(professorId);
 		Integer numRegistros = disponibilidadeRepository.verifyDisponibilidadeProfessor(professorId);
 		return  ResponseEntity.ok(new ApiResponse("Sucesso! Número de disponibilidades para o professor selecionado", numRegistros));
+	}
+
+	public ResponseEntity<ApiResponse> getByIdProfessor(Integer professorId){
+		verificarIdProf(professorId);
+		List<Disponibilidade>  disponibilidades = disponibilidadeRepository.findByIdProfessor((professorId));
+		return ResponseEntity.ok(new ApiResponse("Sucesso! Lista correspondente ao Professor de id: "+professorId, disponibilidades));
+
+	}
+
+	public ResponseEntity<ApiResponse> deletetByIdProfessor(Integer professorId){
+			verificarIdProf(professorId);
+		  disponibilidadeRepository.deleteByIdProfessor((professorId));
+		return ResponseEntity.ok(new ApiResponse(
+				"Sucesso! Disponibilidade do professor com id: " + professorId +" deletada com sucesso", null));
 	}
 }
